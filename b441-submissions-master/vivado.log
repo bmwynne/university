@@ -1,0 +1,225 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Sep 23 17:40:40 2015
+# Process ID: 29266
+# Log file: /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/vivado.log
+# Journal file: /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.xpr
+INFO: [Project 1-313] Project file moved from 'C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab05' since last save.
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/l/Xilinx_Vivado-2015.2_0626_1/Vivado/2015.2/data/ip'.
+open_project: Time (s): cpu = 00:00:11 ; elapsed = 00:00:08 . Memory (MB): peak = 5845.156 ; gain = 31.852 ; free physical = 7261 ; free virtual = 28866
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+close [ open /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/sim.v w ]
+add_files -fileset sim_1 /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/sim.v
+update_compile_order -fileset sim_1
+remove_files -fileset sim_1 /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/sim.v
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+close [ open /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/tb_Mux_4_1.v w ]
+add_files -fileset sim_1 /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/tb_Mux_4_1.v
+update_compile_order -fileset sim_1
+launch_simulation
+INFO: [USF-XSim-27] Simulation object is 'sim_1'
+INFO: [USF-XSim-37] Inspecting design source files for 'main' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+xvlog -m64 --relax -prj main_vlog.prj
+INFO: [VRFC 10-2263] Analyzing Verilog file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sources_1/new/main.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module main
+INFO: [VRFC 10-311] analyzing module Mux_4_1
+INFO: [VRFC 10-311] analyzing module LightSW_4
+INFO: [VRFC 10-2263] Analyzing Verilog file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+Vivado Simulator 2015.2
+Copyright 1986-1999, 2001-2015 Xilinx, Inc. All Rights Reserved.
+Running: /l/Xilinx_Vivado-2015.2_0626_1/Vivado/2015.2/bin/unwrapped/lnx64.o/xelab -wto 70662358f0404f87b2f72c112880aa3b --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot main_behav xil_defaultlib.main xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.Mux_4_1
+Compiling module xil_defaultlib.main
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot main_behav
+
+****** Webtalk v2015.2 (64-bit)
+  **** SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+  **** IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+    ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+
+source /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/xsim.dir/main_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/xsim.dir/main_behav/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Wed Sep 23 18:50:10 2015. For additional details about this file, please refer to the WebTalk help file at /l/Xilinx_Vivado-2015.2_0626_1/Vivado/2015.2/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Wed Sep 23 18:50:10 2015...
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "main_behav -key {Behavioral:sim_1:Functional:main} -tclbatch {main.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2015.2
+Time resolution is 1 ps
+source main.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 30
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'main_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 30
+launch_simulation: Time (s): cpu = 00:00:05 ; elapsed = 00:00:10 . Memory (MB): peak = 5939.082 ; gain = 57.801 ; free physical = 7074 ; free virtual = 28767
+set_property -name {xsim.simulate.runtime} -value {50ns} -objects [current_fileset -simset]
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_sim: Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 5979.254 ; gain = 0.062 ; free physical = 7016 ; free virtual = 28712
+launch_simulation
+INFO: [USF-XSim-27] Simulation object is 'sim_1'
+INFO: [USF-XSim-37] Inspecting design source files for 'main' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+xvlog -m64 --relax -prj main_vlog.prj
+INFO: [VRFC 10-2263] Analyzing Verilog file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sources_1/new/main.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module main
+INFO: [VRFC 10-311] analyzing module Mux_4_1
+INFO: [VRFC 10-311] analyzing module LightSW_4
+INFO: [VRFC 10-2263] Analyzing Verilog file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+Vivado Simulator 2015.2
+Copyright 1986-1999, 2001-2015 Xilinx, Inc. All Rights Reserved.
+Running: /l/Xilinx_Vivado-2015.2_0626_1/Vivado/2015.2/bin/unwrapped/lnx64.o/xelab -wto 70662358f0404f87b2f72c112880aa3b --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot main_behav xil_defaultlib.main xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.Mux_4_1
+Compiling module xil_defaultlib.main
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot main_behav
+
+****** Webtalk v2015.2 (64-bit)
+  **** SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+  **** IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+    ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+
+source /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/xsim.dir/main_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/xsim.dir/main_behav/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Wed Sep 23 18:51:29 2015. For additional details about this file, please refer to the WebTalk help file at /l/Xilinx_Vivado-2015.2_0626_1/Vivado/2015.2/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Wed Sep 23 18:51:29 2015...
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "main_behav -key {Behavioral:sim_1:Functional:main} -tclbatch {main.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2015.2
+Time resolution is 1 ps
+source main.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 50ns
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'main_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 50ns
+launch_simulation: Time (s): cpu = 00:00:03 ; elapsed = 00:00:09 . Memory (MB): peak = 5979.254 ; gain = 0.000 ; free physical = 7015 ; free virtual = 28709
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_sim: Time (s): cpu = 00:00:01 ; elapsed = 00:00:06 . Memory (MB): peak = 5979.254 ; gain = 0.000 ; free physical = 7016 ; free virtual = 28710
+update_compile_order -fileset sim_1
+update_compile_order -fileset sources_1
+update_compile_order -fileset sim_1
+launch_simulation
+INFO: [USF-XSim-27] Simulation object is 'sim_1'
+INFO: [USF-XSim-37] Inspecting design source files for 'tb_Mux_4_1' in fileset 'sim_1'...
+INFO: [USF-XSim-97] Finding global include files...
+INFO: [USF-XSim-98] Fetching design files from 'sim_1'...
+INFO: [USF-XSim-2] XSim::Compile design
+INFO: [USF-XSim-61] Executing 'COMPILE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+xvlog -m64 --relax -prj tb_Mux_4_1_vlog.prj
+INFO: [VRFC 10-2263] Analyzing Verilog file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sources_1/new/main.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module Mux_4_1
+INFO: [VRFC 10-311] analyzing module LightSW_4
+INFO: [VRFC 10-2263] Analyzing Verilog file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/tb_Mux_4_1.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tb_Mux_4_1
+INFO: [VRFC 10-2263] Analyzing Verilog file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/glbl.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module glbl
+INFO: [USF-XSim-3] XSim::Elaborate design
+INFO: [USF-XSim-61] Executing 'ELABORATE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+Vivado Simulator 2015.2
+Copyright 1986-1999, 2001-2015 Xilinx, Inc. All Rights Reserved.
+Running: /l/Xilinx_Vivado-2015.2_0626_1/Vivado/2015.2/bin/unwrapped/lnx64.o/xelab -wto 70662358f0404f87b2f72c112880aa3b --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot tb_Mux_4_1_behav xil_defaultlib.tb_Mux_4_1 xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.Mux_4_1
+Compiling module xil_defaultlib.tb_Mux_4_1
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_Mux_4_1_behav
+
+****** Webtalk v2015.2 (64-bit)
+  **** SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+  **** IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+    ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+
+source /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/xsim.dir/tb_Mux_4_1_behav/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-186] '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav/xsim.dir/tb_Mux_4_1_behav/webtalk/usage_statistics_ext_xsim.xml' has been successfully sent to Xilinx on Wed Sep 23 18:57:07 2015. For additional details about this file, please refer to the WebTalk help file at /l/Xilinx_Vivado-2015.2_0626_1/Vivado/2015.2/doc/webtalk_introduction.html.
+INFO: [Common 17-206] Exiting Webtalk at Wed Sep 23 18:57:07 2015...
+INFO: [USF-XSim-4] XSim::Simulate design
+INFO: [USF-XSim-61] Executing 'SIMULATE' step in '/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.sim/sim_1/behav'
+INFO: [USF-XSim-98] *** Running xsim
+   with args "tb_Mux_4_1_behav -key {Behavioral:sim_1:Functional:tb_Mux_4_1} -tclbatch {tb_Mux_4_1.tcl} -log {simulate.log}"
+INFO: [USF-XSim-8] Loading simulator feature
+Vivado Simulator 2015.2
+Time resolution is 1 ps
+source tb_Mux_4_1.tcl
+# set curr_wave [current_wave_config]
+# if { [string length $curr_wave] == 0 } {
+#   if { [llength [get_objects]] > 0} {
+#     add_wave /
+#     set_property needs_save false [current_wave_config]
+#   } else {
+#      send_msg_id Add_Wave-1 WARNING "No top level signals found. Simulator will start without a wave window. If you want to open a wave window go to 'File->New Waveform Configuration' or type 'create_wave_config' in the TCL console."
+#   }
+# }
+# run 50ns
+INFO: [USF-XSim-96] XSim completed. Design snapshot 'tb_Mux_4_1_behav' loaded.
+INFO: [USF-XSim-97] XSim simulation ran for 50ns
+launch_simulation: Time (s): cpu = 00:00:03 ; elapsed = 00:00:09 . Memory (MB): peak = 5981.254 ; gain = 2.000 ; free physical = 7009 ; free virtual = 28704
+close_sim
+INFO: [Simtcl 6-16] Simulation closed
+close_sim: Time (s): cpu = 00:00:01 ; elapsed = 00:00:10 . Memory (MB): peak = 5983.348 ; gain = 0.000 ; free physical = 6998 ; free virtual = 28697
+reset_run synth_1
+reset_run: Time (s): cpu = 00:00:00.35 ; elapsed = 00:00:10 . Memory (MB): peak = 5983.348 ; gain = 0.000 ; free physical = 7001 ; free virtual = 28697
+launch_runs synth_1
+INFO: [HDL 9-2216] Analyzing Verilog file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sources_1/new/main.v" into library work [/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sources_1/new/main.v:1]
+[Wed Sep 23 19:02:33 2015] Launched synth_1...
+Run output will be captured here: /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.runs/synth_1/runme.log
+reset_run synth_1 -noclean_dir 

@@ -1,0 +1,531 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1FD8E1B11D8F809C00B6C220 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD8E1B01D8F809C00B6C220 /* AppDelegate.swift */; };
+		1FD8E1B31D8F809C00B6C220 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD8E1B21D8F809C00B6C220 /* ViewController.swift */; };
+		1FD8E1B61D8F809C00B6C220 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FD8E1B41D8F809C00B6C220 /* Main.storyboard */; };
+		1FD8E1B81D8F809C00B6C220 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FD8E1B71D8F809C00B6C220 /* Assets.xcassets */; };
+		1FD8E1BB1D8F809C00B6C220 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FD8E1B91D8F809C00B6C220 /* LaunchScreen.storyboard */; };
+		1FD8E1C61D8F809C00B6C220 /* Hello_Touch_bmwynneTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD8E1C51D8F809C00B6C220 /* Hello_Touch_bmwynneTests.swift */; };
+		1FD8E1D11D8F809C00B6C220 /* Hello_Touch_bmwynneUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FD8E1D01D8F809C00B6C220 /* Hello_Touch_bmwynneUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1FD8E1C21D8F809C00B6C220 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FD8E1A51D8F809C00B6C220 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1FD8E1AC1D8F809C00B6C220;
+			remoteInfo = "Hello Touch bmwynne";
+		};
+		1FD8E1CD1D8F809C00B6C220 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1FD8E1A51D8F809C00B6C220 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1FD8E1AC1D8F809C00B6C220;
+			remoteInfo = "Hello Touch bmwynne";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1FD8E1AD1D8F809C00B6C220 /* Hello Touch bmwynne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Hello Touch bmwynne.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FD8E1B01D8F809C00B6C220 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		1FD8E1B21D8F809C00B6C220 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1FD8E1B51D8F809C00B6C220 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		1FD8E1B71D8F809C00B6C220 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1FD8E1BA1D8F809C00B6C220 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		1FD8E1BC1D8F809C00B6C220 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1FD8E1C11D8F809C00B6C220 /* Hello Touch bmwynneTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hello Touch bmwynneTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FD8E1C51D8F809C00B6C220 /* Hello_Touch_bmwynneTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hello_Touch_bmwynneTests.swift; sourceTree = "<group>"; };
+		1FD8E1C71D8F809C00B6C220 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1FD8E1CC1D8F809C00B6C220 /* Hello Touch bmwynneUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Hello Touch bmwynneUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		1FD8E1D01D8F809C00B6C220 /* Hello_Touch_bmwynneUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Hello_Touch_bmwynneUITests.swift; sourceTree = "<group>"; };
+		1FD8E1D21D8F809C00B6C220 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1FD8E1AA1D8F809C00B6C220 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FD8E1BE1D8F809C00B6C220 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FD8E1C91D8F809C00B6C220 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1FD8E1A41D8F809C00B6C220 = {
+			isa = PBXGroup;
+			children = (
+				1FD8E1AF1D8F809C00B6C220 /* Hello Touch bmwynne */,
+				1FD8E1C41D8F809C00B6C220 /* Hello Touch bmwynneTests */,
+				1FD8E1CF1D8F809C00B6C220 /* Hello Touch bmwynneUITests */,
+				1FD8E1AE1D8F809C00B6C220 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1FD8E1AE1D8F809C00B6C220 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1FD8E1AD1D8F809C00B6C220 /* Hello Touch bmwynne.app */,
+				1FD8E1C11D8F809C00B6C220 /* Hello Touch bmwynneTests.xctest */,
+				1FD8E1CC1D8F809C00B6C220 /* Hello Touch bmwynneUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1FD8E1AF1D8F809C00B6C220 /* Hello Touch bmwynne */ = {
+			isa = PBXGroup;
+			children = (
+				1FD8E1B01D8F809C00B6C220 /* AppDelegate.swift */,
+				1FD8E1B21D8F809C00B6C220 /* ViewController.swift */,
+				1FD8E1B41D8F809C00B6C220 /* Main.storyboard */,
+				1FD8E1B71D8F809C00B6C220 /* Assets.xcassets */,
+				1FD8E1B91D8F809C00B6C220 /* LaunchScreen.storyboard */,
+				1FD8E1BC1D8F809C00B6C220 /* Info.plist */,
+			);
+			path = "Hello Touch bmwynne";
+			sourceTree = "<group>";
+		};
+		1FD8E1C41D8F809C00B6C220 /* Hello Touch bmwynneTests */ = {
+			isa = PBXGroup;
+			children = (
+				1FD8E1C51D8F809C00B6C220 /* Hello_Touch_bmwynneTests.swift */,
+				1FD8E1C71D8F809C00B6C220 /* Info.plist */,
+			);
+			path = "Hello Touch bmwynneTests";
+			sourceTree = "<group>";
+		};
+		1FD8E1CF1D8F809C00B6C220 /* Hello Touch bmwynneUITests */ = {
+			isa = PBXGroup;
+			children = (
+				1FD8E1D01D8F809C00B6C220 /* Hello_Touch_bmwynneUITests.swift */,
+				1FD8E1D21D8F809C00B6C220 /* Info.plist */,
+			);
+			path = "Hello Touch bmwynneUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1FD8E1AC1D8F809C00B6C220 /* Hello Touch bmwynne */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FD8E1D51D8F809C00B6C220 /* Build configuration list for PBXNativeTarget "Hello Touch bmwynne" */;
+			buildPhases = (
+				1FD8E1A91D8F809C00B6C220 /* Sources */,
+				1FD8E1AA1D8F809C00B6C220 /* Frameworks */,
+				1FD8E1AB1D8F809C00B6C220 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Hello Touch bmwynne";
+			productName = "Hello Touch bmwynne";
+			productReference = 1FD8E1AD1D8F809C00B6C220 /* Hello Touch bmwynne.app */;
+			productType = "com.apple.product-type.application";
+		};
+		1FD8E1C01D8F809C00B6C220 /* Hello Touch bmwynneTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FD8E1D81D8F809C00B6C220 /* Build configuration list for PBXNativeTarget "Hello Touch bmwynneTests" */;
+			buildPhases = (
+				1FD8E1BD1D8F809C00B6C220 /* Sources */,
+				1FD8E1BE1D8F809C00B6C220 /* Frameworks */,
+				1FD8E1BF1D8F809C00B6C220 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1FD8E1C31D8F809C00B6C220 /* PBXTargetDependency */,
+			);
+			name = "Hello Touch bmwynneTests";
+			productName = "Hello Touch bmwynneTests";
+			productReference = 1FD8E1C11D8F809C00B6C220 /* Hello Touch bmwynneTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		1FD8E1CB1D8F809C00B6C220 /* Hello Touch bmwynneUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1FD8E1DB1D8F809C00B6C220 /* Build configuration list for PBXNativeTarget "Hello Touch bmwynneUITests" */;
+			buildPhases = (
+				1FD8E1C81D8F809C00B6C220 /* Sources */,
+				1FD8E1C91D8F809C00B6C220 /* Frameworks */,
+				1FD8E1CA1D8F809C00B6C220 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1FD8E1CE1D8F809C00B6C220 /* PBXTargetDependency */,
+			);
+			name = "Hello Touch bmwynneUITests";
+			productName = "Hello Touch bmwynneUITests";
+			productReference = 1FD8E1CC1D8F809C00B6C220 /* Hello Touch bmwynneUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1FD8E1A51D8F809C00B6C220 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0800;
+				LastUpgradeCheck = 0800;
+				ORGANIZATIONNAME = "Brandon Wynne";
+				TargetAttributes = {
+					1FD8E1AC1D8F809C00B6C220 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+					};
+					1FD8E1C01D8F809C00B6C220 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 1FD8E1AC1D8F809C00B6C220;
+					};
+					1FD8E1CB1D8F809C00B6C220 = {
+						CreatedOnToolsVersion = 8.0;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 1FD8E1AC1D8F809C00B6C220;
+					};
+				};
+			};
+			buildConfigurationList = 1FD8E1A81D8F809C00B6C220 /* Build configuration list for PBXProject "Hello Touch bmwynne" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1FD8E1A41D8F809C00B6C220;
+			productRefGroup = 1FD8E1AE1D8F809C00B6C220 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1FD8E1AC1D8F809C00B6C220 /* Hello Touch bmwynne */,
+				1FD8E1C01D8F809C00B6C220 /* Hello Touch bmwynneTests */,
+				1FD8E1CB1D8F809C00B6C220 /* Hello Touch bmwynneUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1FD8E1AB1D8F809C00B6C220 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FD8E1BB1D8F809C00B6C220 /* LaunchScreen.storyboard in Resources */,
+				1FD8E1B81D8F809C00B6C220 /* Assets.xcassets in Resources */,
+				1FD8E1B61D8F809C00B6C220 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FD8E1BF1D8F809C00B6C220 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FD8E1CA1D8F809C00B6C220 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1FD8E1A91D8F809C00B6C220 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FD8E1B31D8F809C00B6C220 /* ViewController.swift in Sources */,
+				1FD8E1B11D8F809C00B6C220 /* AppDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FD8E1BD1D8F809C00B6C220 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FD8E1C61D8F809C00B6C220 /* Hello_Touch_bmwynneTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1FD8E1C81D8F809C00B6C220 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1FD8E1D11D8F809C00B6C220 /* Hello_Touch_bmwynneUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		1FD8E1C31D8F809C00B6C220 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1FD8E1AC1D8F809C00B6C220 /* Hello Touch bmwynne */;
+			targetProxy = 1FD8E1C21D8F809C00B6C220 /* PBXContainerItemProxy */;
+		};
+		1FD8E1CE1D8F809C00B6C220 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1FD8E1AC1D8F809C00B6C220 /* Hello Touch bmwynne */;
+			targetProxy = 1FD8E1CD1D8F809C00B6C220 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		1FD8E1B41D8F809C00B6C220 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1FD8E1B51D8F809C00B6C220 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		1FD8E1B91D8F809C00B6C220 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				1FD8E1BA1D8F809C00B6C220 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		1FD8E1D31D8F809C00B6C220 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1FD8E1D41D8F809C00B6C220 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1FD8E1D61D8F809C00B6C220 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Hello Touch bmwynne/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "A290.Hello-Touch-bmwynne";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
+			};
+			name = Debug;
+		};
+		1FD8E1D71D8F809C00B6C220 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = "Hello Touch bmwynne/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "A290.Hello-Touch-bmwynne";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
+			};
+			name = Release;
+		};
+		1FD8E1D91D8F809C00B6C220 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = "Hello Touch bmwynneTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "A290.Hello-Touch-bmwynneTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hello Touch bmwynne.app/Hello Touch bmwynne";
+			};
+			name = Debug;
+		};
+		1FD8E1DA1D8F809C00B6C220 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				INFOPLIST_FILE = "Hello Touch bmwynneTests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "A290.Hello-Touch-bmwynneTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Hello Touch bmwynne.app/Hello Touch bmwynne";
+			};
+			name = Release;
+		};
+		1FD8E1DC1D8F809C00B6C220 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				INFOPLIST_FILE = "Hello Touch bmwynneUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "A290.Hello-Touch-bmwynneUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = "Hello Touch bmwynne";
+			};
+			name = Debug;
+		};
+		1FD8E1DD1D8F809C00B6C220 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				INFOPLIST_FILE = "Hello Touch bmwynneUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "A290.Hello-Touch-bmwynneUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
+				TEST_TARGET_NAME = "Hello Touch bmwynne";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1FD8E1A81D8F809C00B6C220 /* Build configuration list for PBXProject "Hello Touch bmwynne" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FD8E1D31D8F809C00B6C220 /* Debug */,
+				1FD8E1D41D8F809C00B6C220 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FD8E1D51D8F809C00B6C220 /* Build configuration list for PBXNativeTarget "Hello Touch bmwynne" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FD8E1D61D8F809C00B6C220 /* Debug */,
+				1FD8E1D71D8F809C00B6C220 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FD8E1D81D8F809C00B6C220 /* Build configuration list for PBXNativeTarget "Hello Touch bmwynneTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FD8E1D91D8F809C00B6C220 /* Debug */,
+				1FD8E1DA1D8F809C00B6C220 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1FD8E1DB1D8F809C00B6C220 /* Build configuration list for PBXNativeTarget "Hello Touch bmwynneUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1FD8E1DC1D8F809C00B6C220 /* Debug */,
+				1FD8E1DD1D8F809C00B6C220 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1FD8E1A51D8F809C00B6C220 /* Project object */;
+}

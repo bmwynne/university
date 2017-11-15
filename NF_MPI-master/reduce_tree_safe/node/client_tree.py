@@ -1,0 +1,114 @@
+import socket
+import sys
+from PacketLib import *
+import time
+from struct import *
+
+def str2hex(string):
+    return ' '.join('%02x' % ord(b) for b in string)
+
+def make_IP_pkt2(pkt_len = 60, message = '', **kwargs):
+    if pkt_len < 60:
+        pkt_len = 60
+    pkt = make_MAC_hdr(**kwargs)/make_IP_hdr(**kwargs)/message
+    return pkt
+
+MAC = ['00:ca:fe:00:00:01', '00:ca:fe:00:00:02',
+       '00:ca:fe:00:00:03', '00:ca:fe:00:00:04']
+
+IP = ['192.168.1.1', '192.168.2.1', '192.168.3.1', '192.168.4.1']
+
+TTL = 30
+
+length = 64
+DA = MAC[1]
+SA = MAC[1]
+dst_ip = IP[0]
+src_ip = IP[1]
+proto = 155
+
+server_address = ''
+rank = 0
+root = 0
+size = 0
+sock=''
+pkt =''
+
+#   localparam NODE_RING_ELT                = 0;
+#   localparam NODE_RING_ERT                = 1;
+#   localparam NODE_RING_ELNT              = 2;
+#   localparam NODE_RING_ERNT              = 3;
+#   localparam NODE_RING_IT               = 4;
+#   localparam NODE_RING_IR               = 5;
+#   localparam NODE_RING_IL               = 6;
+#   localparam NODE_RING                       = 7;
+
+def barrier():
+    try:  
+        print root, rank, size  
+        if root == rank and rank == 0:
+            print '1'
+            pkt = make_IP_pkt2(dst_MAC=DA, src_MAC=SA, TTL=TTL, dst_IP=dst_ip,
+                               src_IP=src_ip, proto=proto, pkt_len=length)/scapy.UDP(sport=45329)/pack('2sHBB','\0A',123,2,2)/pack('HHHHHHHH',rank_n,root_n,size_n,0,768,0,0,0)/pack('3Q',socket.htonl(1),socket.htonl(2),socket.htonl(3))
+        elif root == rank and rank >= (size-1)/2:
+            print '2'
+            pkt = make_IP_pkt2(dst_MAC=DA, src_MAC=SA, TTL=TTL, dst_IP=dst_ip,
+                               src_IP=src_ip, proto=proto, pkt_len=length)/scapy.UDP(sport=45329)/pack('2sHBB','\0A',123,2,0)/pack('HHHHHHHH',rank_n,root_n,size_n,0,768,0,0,0)/pack('3Q',socket.htonl(1),socket.htonl(2),socket.htonl(3))
+        elif root == rank :          
+            print '3'      
+            pkt = make_IP_pkt2(dst_MAC=DA, src_MAC=SA, TTL=TTL, dst_IP=dst_ip,
+                               src_IP=src_ip, proto=proto, pkt_len=length)/scapy.UDP(sport=45329)/pack('2sHBB','\0A',123,2,4)/pack('HHHHHHHH',rank_n,root_n,size_n,0,768,0,0,0)/pack('3Q',socket.htonl(1),socket.htonl(2),socket.htonl(3))      
+        elif rank == 0 :
+            print '4'
+            pkt = make_IP_pkt2(dst_MAC=DA, src_MAC=SA, TTL=TTL, dst_IP=dst_ip,
+                               src_IP=src_ip, proto=proto, pkt_len=length)/scapy.UDP(sport=45329)/pack('2sHBB','\0A',123,2,3)/pack('HHHHHHHH',rank_n,root_n,size_n,0,768,0,0,0)/pack('3Q',socket.htonl(1),socket.htonl(2),socket.htonl(3))
+        elif rank >= (size-1)/2:
+            print '5'
+            pkt = make_IP_pkt2(dst_MAC=DA, src_MAC=SA, TTL=TTL, dst_IP=dst_ip,
+                               src_IP=src_ip, proto=proto, pkt_len=length)/scapy.UDP(sport=45329)/pack('2sHBB','\0A',123,2,1)/pack('HHHHHHHH',rank_n,root_n,size_n,0,768,0,0,0)/pack('3Q',socket.htonl(1),socket.htonl(2),socket.htonl(3))
+        elif (rank == 1 and root==3) or (rank == 2 and root==5):
+            print '6'
+            pkt = make_IP_pkt2(dst_MAC=DA, src_MAC=SA, TTL=TTL, dst_IP=dst_ip,
+                               src_IP=src_ip, proto=proto, pkt_len=length)/scapy.UDP(sport=45329)/pack('2sHBB','\0A',123,2,6)/pack('HHHHHHHH',rank_n,root_n,size_n,0,768,0,0,0)/pack('3Q',socket.htonl(1),socket.htonl(2),socket.htonl(3))
+        elif (rank == 1 and root==4) or (rank == 2 and root==6):
+            print '7'
+            pkt = make_IP_pkt2(dst_MAC=DA, src_MAC=SA, TTL=TTL, dst_IP=dst_ip,
+                               src_IP=src_ip, proto=proto, pkt_len=length)/scapy.UDP(sport=45329)/pack('2sHBB','\0A',123,2,7)/pack('HHHHHHHH',rank_n,root_n,size_n,0,768,0,0,0)/pack('3Q',socket.htonl(1),socket.htonl(2),socket.htonl(3))
+        else:
+            print '6'
+            pkt = make_IP_pkt2(dst_MAC=DA, src_MAC=SA, TTL=TTL, dst_IP=dst_ip,
+                               src_IP=src_ip, proto=proto, pkt_len=length)/scapy.UDP(sport=45329)/pack('2sHBB','\0A',123,2,5)/pack('HHHHHHHH',rank_n,root_n,size_n,0,768,0,0,0)/pack('3Q',socket.htonl(1),socket.htonl(2),socket.htonl(3))
+        
+        
+        start = time.time()
+        sock.sendall(str(pkt))      
+        #if rank == root: 
+        data = sock.recv(164)
+        elapsed = (time.time() - start)
+        print >>sys.stderr, 'received released signal : ', data, ' time : ',elapsed
+    
+    except socket.error, msg:
+        print >>sys.stderr, msg
+        sys.exit(1)
+
+if __name__=='__main__':
+    sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    server_address = sys.argv[1]
+    try:
+        sock.connect(server_address)
+    except socket.error, msg:
+        print >>sys.stderr, msg
+        sys.exit(1)
+    
+    rank = int(sys.argv[2])
+    root = int(sys.argv[3])
+    size = int(sys.argv[4])
+    rank_n = socket.htons(int(sys.argv[2]))
+    root_n = socket.htons(int(sys.argv[3]))
+    size_n = socket.htons(int(sys.argv[4]))
+        
+    message = 'host0'
+    sock.sendall(message)
+    
+    barrier()
+    sock.close()

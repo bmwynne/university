@@ -1,0 +1,4 @@
+Name: John Binzer <jfbinzer>
+Title: Oh The Places He'll Jog
+UML Software: Lucidchart using jfbinzer@indiana.edu
+Description: Application will track user location and draw a line on a map of the route the user walks/runs. User is able to change the color of the line drawn, map type, and their name. They are also able to add their favorite locations to a list which is stored in memory.

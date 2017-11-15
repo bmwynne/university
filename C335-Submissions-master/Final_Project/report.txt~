@@ -1,0 +1,14 @@
+Name: Brandon Wynne
+Date: April 1, 2014
+C335 Computer Structures
+Final Project: Quick Draw
+
+Tasks I was responsible for:
+
+
+I helped with development of the game by working with Paul for the games logic and coding some portions of the game.
+I directly coded some audio and was in charge of converting and implementing the custom audio, before we knew how to do it. 
+I also was in charge of creating and coding the second player portion of the game. I had to take the code from the 
+single player game and instantiated two of everything as well as get the second nunchuk to work and read data. This proved
+to be more difficult than I thought because I had to seperate calculations and create different boundaries for the matrices.
+ 

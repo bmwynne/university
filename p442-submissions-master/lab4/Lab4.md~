@@ -1,0 +1,28 @@
+Created by      : Brandon Wynne
+Partner         : Paul Conway
+Date Created    : February 12, 2015
+Last modified by: Brandon Wynne
+Last modified on: February 12, 2015
+
+
+
+#Overview#
+In this lab we created a portable atlimeter using the F3 Discovery Board and the STEVAL mki12v1 pressure sensor. Utilizing a 9V battery, the F3 board was taken around different elevators around the IU Bloomington campus to measure altitude.  
+
+
+#Requirements#
+To achieve this Lab's goal we needed to further enhance our code base from the previous lab -- lab3. The system was required to: start and stop logging utilizing the blue user button, a visual indication of the state of the device via LEDs,  stamped data with a tick count that has a period resolution of 100mS or less, and the ability to retrieve the logged data from a shell command.
+
+
+#Taking Data Using Our System#
+Utilizing our existing code base allowed us to fulfill the requirements. Two states were created: logging and non-logging. State setting is done by the systemhandler. This allowed us to sync CPU cycles and logging with the cycle count register instead of initializing a new thread and interrupts.  This allowed our time measuring to be as accurate as we believe possible. The board's LEDs were mapped to these states. When the user button is pressed all of the LEDs light up and the system is logging. After five minutes the LEDs turn off and the system is done logging. Resetting the board with the reset button resets the state of the program and the data stored in memory. 
+
+#Difficulties#
+Utilizing the system handler to get accurate time stamps was the most difficult task. Through resetting the cycle counter we were able to achieve accurate measurements.
+
+#Results#
+
+###GPIO PINS:###
+
+
+###Graphs:###

@@ -1,0 +1,56 @@
+Name: Brandon Wynne
+Partner: Paul Conway
+Date: April 17, 2014
+Lab 12
+
+
+Difficulties: 
+--------------------------------------------------------
+During this lab one of our biggiest difficulties was getting our Makefile to be accurate, containing all the files
+and objects that we need. In the Makefile we included "<diskio.o>", which caused problems. Once this was removed things
+were compiling correctly. Also, certin .WAV files were not working in our code. It was important that the sameple rate 
+was 11,025 and the bit rate 8.  At the end of the lab we thought we had a bug, altough our nunchuk was not plugged in
+all the way. 
+
+
+What we learned:
+--------------------------------------------------------
+In this lab we continued to use I^2C in order to utilize DMA. We learned how to impliment the
+LCD/SD with DMA instead of SPI. We also learned how .WAV files contain metadata that
+specifies the rate that samples should be played back. Hardware timers are used to
+provide a pricise time reference, in order for the user to not notice the deviation in rate.
+
+
+
+Questions:
+--------------------------------------------------------
+
+Question 1:
+
+This STM32 board has two DMA peripherals, which both have multiple channels.
+The peripheral base address is important beacause it is utilized to configure
+channels correctly. Initializing DMA between peripherals and memory allows
+the hardware to transact. The address points to the correct channel that is being used.
+The channel initialized also specifies which bus is being used.
+
+Question 2:
+
+The DMA memory increment is disabled for the peripheral and Tx channels. It is important to enable
+incrementing for the Rx channel in order to read the operation.
+
+Question 3:
+
+This while() allows DMA to wait for completion of the message and data transfer.
+
+Question 4:
+
+Each transfer has an amount of overhead, if the transfer is less than 4 bytes than it's not worth using xchng_datablock()
+because the memory cost will be the same.
+
+Question 5:
+
+The DMA controller and the audio player must work on different portions so that a delay does not occur. The audio
+output is sensitive to the rate that the data samples transfer to the DAC. A way to prevent them from working
+on the same buffer parts was needed. Using the interrupts to signal the audio player application, once the lower
+or upper portion of the buffer has empted, allows the DMA controller to continue to transfer bytes to the DAC at
+accurate intervals.

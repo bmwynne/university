@@ -1,0 +1,13 @@
+
+main.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <main>:
+   0:	b500      	push	{lr}
+   2:	4802      	ldr	r0, [pc, #8]	; (c <main+0xc>)
+   4:	f7ff fffe 	bl	0 <printf>
+   8:	2000      	movs	r0, #0
+   a:	bd00      	pop	{pc}
+   c:	00000000 	.word	0x00000000

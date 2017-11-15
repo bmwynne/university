@@ -1,0 +1,17 @@
+Name: Brandon Wynne
+Partner: Paul Conway
+Date: April 17, 2014
+Lab 12
+
+
+Difficulties: 
+--------------------------------------------------------
+During this lab one of our biggiest difficulties was getting our Makefile to be accurate, containing all the files
+and objects that we need. In the Makefile we included "<diskio.o>", which caused problems. Once this was removed things
+were compiling correctly. Also, certin .WAV files were not working in our code. It was important that the sameple rate 
+was 11,025 and the bit rate 8.  At the end of the lab we thought we had a bug, altough our nunchuk was not plugged in
+all the way. 
+
+
+What we learned:
+--------------------------------------------------------

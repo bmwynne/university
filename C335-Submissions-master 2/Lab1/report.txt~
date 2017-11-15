@@ -1,0 +1,10 @@
+Name: Brandon Wynne
+Username: bmwynne
+Date: 1-16-2014
+
+I went through the tutorials for unix and found that I knew all of them from
+taking a C in Unix course and having programming courses with Professor German.
+
+I then went to the C program and had only one small error, I forgot to add a ;.
+I was able to create the infinite using a While (1) true loop. I implimented the sleep function from the imported library to space out the print statements.
+I did not have any difficulties with this lab.

@@ -1,0 +1,46 @@
+Brandon Wynne
+Partner: Paul Conway
+Lab 6
+2/27/2014
+
+
+Overview of results:
+
+In this lab my partner and I were able to collectively solve problems raised by assertions. In order to 
+catch assertions at runtime, a macro called assert_param was used. This macro was initialized
+by including the library "stm32f30x_conf.h".The macro tests 'expr' and calls 'assert_failed' if
+the value is false. The 'assert_failed' function was called when the assertion failed, and it provided
+the file name and line number of the problem. Using SerialT we were able to send the assertion, which was 
+downloaded to the board, and read through the command line. Using printf the assertion was debugged by
+changing the GPIO to NO_PULL. We were able to turn on the north led. We also were able to check the
+status of the led_state by using printf("led_state=%d\n",led_state);.
+
+Using the Saleae Analyzer we were also able to determine the impact of printf. With printf
+the frequency the led was 40Hz with a width of 12.5 miliseconds, conversely without printf the frequency
+was 100khz and the width was 5 micro seconds. Using printf requires much more memory and thus the refresh 
+rate of the led is slower compared to when printf is not used. 
+
+After analyzing the frequency of the led with the analyzer, we used GDB to debug the location of the 
+initfunction which raised the assertion. 
+
+
+Problems:
+
+We had several problems in the beginning using serialT to print out the assertion. We did not
+know that serialT was needed. We also had trouble using serialT to find the assertion using GDB.
+Learning how to use GDB was also difficult, but we were able to figure it out.
+
+Debugging Technique:
+
+I was most comfortable using printf to debug the program because I was previously familliar with this method.
+I find that GDB is most useful, although I am scared to use it. I feel that with enough
+practice I will find GDB to become essential.
+
+What did I learn:
+
+I learned that printf is very valuable in debugging problems. I also learned that printf
+is not reccomended in situations that require less resources because it increases the time. Using
+GDB would be much more valuable in that situation. I also learned how to further use the Saelae logic
+analyzer, which was very helpful in determining the I/O width, period, and frequency. I also learned
+that assertions were very important in tracking problems, and that you need SerialT to print them
+to the console. 

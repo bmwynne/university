@@ -1,0 +1,11 @@
+Brandon Wynne
+
+Results:
+
+Word Count C File:
+I was able to complete my implementation of Word Count C file using a while
+loop. At first I had problems interpretting the white space but then I finally figured it out. It was difficult at first because I did not know how to do it in C, or how to deal with whitespace, but receiving help in lab and collaborating with Earl Dean and Sarah Zhang helped a lot.I learned how to use a while loop to traverse an input text file and output to a seperate file.
+
+Printf and Test C files:
+I really struggled with this assignment. I wanted to go into office hours to 
+clarify a couple of things but this has been the worst week. I plan to try to clear it up in todays lab, and recieve help so that I can fully understand it. 

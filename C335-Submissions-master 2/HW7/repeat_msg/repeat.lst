@@ -1,0 +1,8 @@
+
+repeat.o:     file format elf32-littlearm
+
+
+Disassembly of section .text:
+
+00000000 <repeat>:
+   0:	0001      	movs	r1, r0

@@ -1,0 +1,9 @@
+struct futent
+{
+  int *value; /* allocate space for this int somewhere or
+		 change to just an "int" */
+  int flag;
+  int state;         
+  tid_typ tid;
+}future;
+

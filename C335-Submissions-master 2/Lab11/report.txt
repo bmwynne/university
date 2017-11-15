@@ -1,0 +1,31 @@
+Name: Brandon Wynne
+Partner: Paul Conway
+April 10, 2014
+Lab 11
+
+Difficulties:
+-----------------------------------------------------------
+In this lab my lab partner and I had difficulties with putchar() and getchar(). Our enqueue and dequeue worked properly.
+The problem was that our  putchar() function was not working, and therefore serialT was not working. Init functions that were
+inside of our systick were causing our putchar() to not work. Once we removed the init functions putchar() worked and we were able to print
+characters to serialT. We knew our queue was working because characters were printing and our flag, which let us know
+when array values were being hit, was printed. 
+
+We also had errors recieving data. SerialT recieved four characters (4bytes) because the queue was of size int (4bytes). Example: a -> aaaa
+
+
+
+
+What we learned:
+------------------------------------------------------------
+
+In this lab we learned how to use interrupts and handlers to have the hardware execute code via a periodic interrupt based on a 
+programmed frequency. An example of this is our LED cycle function. The programmed "normal" refresh rate is 100Hz.
+When the user input button is pressed the handler is executed, interrupting the normal process, and slows the rate to
+10Hz. 
+
+We also learned how to impliment a circular queue system to store int(characters) in an array. Putchar() enqueues data to the TX queue
+while dequeue removes data from the getchar() RX queue. 
+
+We also learned how to use github to branch projects. At first we did not mess with this function of Git.
+After learning how to use it we found it to be very beneficial in fixing errors and testing new things.

@@ -1,0 +1,19 @@
+Vivado Simulator 2015.2
+Copyright 1986-1999, 2001-2015 Xilinx, Inc. All Rights Reserved.
+Running: /l/Xilinx_Vivado-2015.2_0626_1/Vivado/2015.2/bin/unwrapped/lnx64.o/xelab -wto 0568863938b04e18aa84d6b0853439cd --debug typical --relax --mt 8 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot tb_AU_behav xil_defaultlib.tb_AU xil_defaultlib.glbl -log elaborate.log 
+Using 8 slave threads.
+Starting static elaboration
+WARNING: [VRFC 10-278] actual bit length 4 differs from formal bit length 2 for port b [/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab07/Lab07.srcs/sim_1/new/tb_AU.v:29]
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.FullAdd
+Compiling module xil_defaultlib.FullSub
+Compiling module xil_defaultlib.Decrement_a
+Compiling module xil_defaultlib.Transfer_a
+Compiling module xil_defaultlib.Mux_4_1
+Compiling module xil_defaultlib.AU_4Bit
+Compiling module xil_defaultlib.tb_AU
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_AU_behav

@@ -1,0 +1,10 @@
+#-----------------------------------------------------------
+# Webtalk v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Oct  7 20:32:52 2015
+# Process ID: 17117
+# Log file: /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab07/Lab07.sim/sim_1/behav/webtalk.log
+# Journal file: /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab07/Lab07.sim/sim_1/behav/webtalk.jou
+#-----------------------------------------------------------
+source /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab07/Lab07.sim/sim_1/behav/xsim.dir/ALU_4Bit_behav/webtalk/xsim_webtalk.tcl -notrace

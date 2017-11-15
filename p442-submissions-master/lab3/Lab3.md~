@@ -1,0 +1,15 @@
+
+
+
+==== Wiring Schematic ====
+
+__________________________________
+|  Pins   |      Altimeter       |
+|_________|______________________|      
+|  PA5    |         SCL          |
+|  PA6    |         SDO          |
+|  PA7    |         SDA		 |
+|  PA8    |         CS		 |
+|  PC4    |         RX		 |
+|  PC5    |         TX		 |
+|  GND    |         GND		 |

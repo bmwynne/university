@@ -1,0 +1,25 @@
+Name: Brandon Wynne
+Lab Partner: Paul Conway
+March 6, 2014 6:42
+Lab 7
+
+Results:
+
+Currently we have several small thngs going for us. The code compiles and downloads. Also,
+we were able to have values reported to the screen, although all of the values
+are the same at x, y ,and z printing 288.174. 
+
+Difficulties:
+
+We had difficulties with the driver for the gyro. First we did not initialize 
+both RawData and tmpBuffer as arrays. Also we did not initialize some of the variables
+as type unsigned int. Once That was solved all the printable errors were resolved.
+Now things are currently tricky. There is some small bug that we are trying to find 
+within the code. Nobody at the moment can find it.
+
+What did I learn:
+
+So far I have learned how a spi interface works and how it communicates with
+slave peripherals. I also have learned how to send and get data from the spi to the 
+console. Although at the moment not the correct data is being received. 
+This will be updated once the lab is solved. 

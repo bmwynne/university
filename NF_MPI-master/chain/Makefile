@@ -1,0 +1,7 @@
+simulate: 
+	python chain_cosim.py 
+	/usr/local/bin/gtkwave -f testbench.vcd
+
+clean:
+	rm -f testbench.vcd*
+	rm -f chain

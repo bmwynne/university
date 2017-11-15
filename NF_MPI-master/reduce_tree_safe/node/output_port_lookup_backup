@@ -1,0 +1,646 @@
+///////////////////////////////////////////////////////////////////////////////
+// vim:set shiftwidth=3 softtabstop=3 expandtab:
+// $Id: output_port_lookup.v 5240 2009-03-14 01:50:42Z grg $
+//
+// Module: switch_output_port.v
+// Project: NF2.1
+// Description: reads incoming packets parses them and decides on the output port
+///////////////////////////////////////////////////////////////////////////////
+`timescale 1ns/1ps
+  module output_port_lookup
+    #(parameter DATA_WIDTH = 64,
+      parameter CTRL_WIDTH=DATA_WIDTH/8,
+      parameter UDP_REG_SRC_WIDTH = 2,
+      parameter INPUT_ARBITER_STAGE_NUM = 2,
+      parameter NUM_OUTPUT_QUEUES = 8,
+      parameter STAGE_NUM = 4,
+      parameter NUM_IQ_BITS = 3)
+
+   (// --- data path interface
+    output reg [DATA_WIDTH-1:0]        out_data,
+    output reg [CTRL_WIDTH-1:0]        out_ctrl,
+    output reg                         out_wr,
+    input                              out_rdy,
+
+    input  [DATA_WIDTH-1:0]            in_data,
+    input  [CTRL_WIDTH-1:0]            in_ctrl,
+    input                              in_wr,
+    output                             in_rdy,
+
+    // --- Register interface
+    input                              reg_req_in,
+    input                              reg_ack_in,
+    input                              reg_rd_wr_L_in,
+    input  [`UDP_REG_ADDR_WIDTH-1:0]   reg_addr_in,
+    input  [`CPCI_NF2_DATA_WIDTH-1:0]  reg_data_in,
+    input  [UDP_REG_SRC_WIDTH-1:0]     reg_src_in,
+
+    output                             reg_req_out,
+    output                             reg_ack_out,
+    output                             reg_rd_wr_L_out,
+    output  [`UDP_REG_ADDR_WIDTH-1:0]  reg_addr_out,
+    output  [`CPCI_NF2_DATA_WIDTH-1:0] reg_data_out,
+    output  [UDP_REG_SRC_WIDTH-1:0]    reg_src_out,
+
+
+    // --- Misc
+    input                              clk,
+    input                              reset);
+
+   function integer log2;
+      input integer number;
+      begin
+	     log2=0;
+         while(2**log2<number) begin
+            log2=log2+1;
+         end
+      end
+   endfunction // log2
+
+   //--------------------- Internal Parameter-------------------------
+   parameter LUT_DEPTH_BITS = 4;
+   parameter DEFAULT_MISS_OUTPUT_PORTS = 8'b01010101; // exclude the CPU queues
+
+   parameter NUM_STATES            = 4;
+   parameter WAIT_TILL_DONE_DECODE = 1;
+   parameter WRITE_HDR             = 2;
+   parameter WAIT_EOP              = 8;
+   parameter UPDATE_REDUCE_MSG     = 3;
+   parameter UPDATE_REDUCE_BUFFER  = 5;
+   
+   localparam REDUCE_IDLE     = 0;
+   localparam AT_REDUCE       = 1;
+   localparam WAIT_CPU         = 2;
+   localparam WAIT_NETWORK     = 3;
+   localparam WAIT_NOTIFICATION= 4;
+   
+   localparam TOPO_RING		   = 1;
+   localparam TOPO_TREE		   = 2;
+   localparam TOPO_BUTTERFLY       = 3;
+   localparam TOPO_TRUNK	   = 4;
+   localparam TOPO_STAR            = 5;
+   
+   localparam NODE_RING_TARGET     = 0;
+   localparam NODE_RING_EDGE       = 1;
+   localparam NODE_RING_INTERNAL_R = 2;
+   localparam NODE_RING_INTERNAL_L = 3;
+   
+   
+
+   
+   localparam MSG_AT_REDUCE   		= 65;   
+   localparam MSG_PREV_AT_REDUCE      	= 66;
+   localparam MSG_RELEASE_REDUCE      	= 67;
+   localparam MSG_SIBBLING_AT_REDUCE	= 68;
+   localparam MSG_CHILDREN_AT_REDUCE	= 69;
+   
+   
+   //---------------------- Wires and regs----------------------------
+
+   wire                         lookup_ack;
+   wire [47:0]                  dst_mac;
+   wire [47:0]                  src_mac;
+   wire [15:0]                  ethertype;
+   wire [NUM_IQ_BITS-1:0]       src_port;
+   wire                         decode_done;
+   wire			      	reduce_pkt;
+   wire	       			not_reduce_pkt;
+   wire [15:0]	       		message;
+   wire [15:0]		       	comm_id;
+   wire [7:0]	       		topo_type;
+   wire [7:0]		       	node_type;
+   wire [15:0] 			rank;
+   wire [15:0] 			root;
+   wire [15:0] 			size;
+   wire [15:0] 			op;
+   wire [15:0] 			count;
+   wire [15:0] 			data_type;
+   wire [15:0] 			on_the_path;
+   wire [15:0] 			rank_latched;
+   wire [15:0] 			root_latched;
+   wire [15:0] 			size_latched;
+   wire [15:0] 			op_latched;
+   wire [15:0] 			count_latched;
+   wire [15:0] 			data_type_latched;
+   wire [15:0] 			on_the_path_latched;
+   wire [15:0]       		comm_id_latched;
+   wire [7:0]                   topo_type_latched;
+   wire [7:0]                   node_type_latched;
+   wire [15:0]		       	message_latched;
+
+   reg [31:0] 			src_ip, src_ip_next;
+   reg [31:0] 			dst_ip, dst_ip_next;
+   reg [15:0] 			ip_cksum, ip_cksum_next; 			
+				
+   wire [NUM_OUTPUT_QUEUES-1:0] dst_ports;
+   wire [NUM_OUTPUT_QUEUES-1:0] dst_ports_latched;
+
+   wire [LUT_DEPTH_BITS-1:0]    rd_addr;          // address in table to read
+   wire                         rd_req;           // request a read
+   wire [NUM_OUTPUT_QUEUES-1:0] rd_oq;            // data read from the LUT at rd_addr
+   wire                         rd_wr_protect;    // wr_protect bit read
+   wire [47:0]                  rd_mac;           // data to match in the CAM
+   wire                         rd_ack;           // pulses high when data is rdy
+
+   wire [LUT_DEPTH_BITS-1:0]    wr_addr;
+   wire                         wr_req;
+   wire [NUM_OUTPUT_QUEUES-1:0] wr_oq;
+   wire                         wr_protect;       // wr_protect bit to write
+   wire [47:0]                  wr_mac;           // data to match in the CAM
+   wire                         wr_ack;           // pulses high when wr is done
+
+   wire                         lut_hit;          // pulses high on a hit
+   wire                         lut_miss;         // pulses high on a miss
+
+   reg                          in_fifo_rd_en;
+   wire [CTRL_WIDTH-1:0]        in_fifo_ctrl_dout;
+   wire [DATA_WIDTH-1:0]        in_fifo_data_dout;
+   wire                         in_fifo_nearly_full;
+   wire                         in_fifo_empty;
+
+   reg                          dst_port_rd;
+   wire                         dst_port_fifo_nearly_full;
+   wire                         dst_port_fifo_empty;
+
+   reg [15:0]		       	decoded_src;
+
+   reg [NUM_STATES-1:0]         state, state_next;
+   reg [2:0]   			reduce_state, reduce_state_next;
+   reg [2:0]	       		word_count, word_count_next;
+   reg [12:0] 			data_count, data_count_next;
+ 			
+   	
+   reg [63:0] 			buffer [0:255];
+   reg [63:0] 			buffer_next [0:255];
+   reg [255:0] 			lut_ptr;
+   reg [255:0] 			lut_ptr_next;
+   
+   //------------------------- Modules-------------------------------
+   is_reduce_pkt
+     #(.DATA_WIDTH (DATA_WIDTH),
+       .CTRL_WIDTH (CTRL_WIDTH),
+       .NUM_IQ_BITS(NUM_IQ_BITS),
+       .INPUT_ARBITER_STAGE_NUM(INPUT_ARBITER_STAGE_NUM))
+     is_reduce_pkt
+         (.in_data(in_data),
+          .in_ctrl(in_ctrl),
+          .in_wr(in_wr),
+          .reduce_pkt (reduce_pkt),
+          .not_reduce_pkt (not_reduce_pkt),
+          .decode_done (decode_done),
+          .message (message),
+          .comm_id (comm_id),
+          .topo_type (topo_type),
+          .node_type (node_type),
+	  .rank (rank),
+	  .root (root),
+	  .size (size),
+	  .op (op),
+	  .count (count),
+	  .data_type (data_type),
+	  .on_the_path (on_the_path),
+          .reset(reset),
+          .clk(clk));
+
+   /* The size of this fifo has to be large enough to fit the previous modules' headers
+    * and the ethernet header */
+   small_fifo #(.WIDTH(DATA_WIDTH+CTRL_WIDTH), .MAX_DEPTH_BITS(5))
+      input_fifo
+        (.din ({in_ctrl,in_data}),     // Data in
+         .wr_en (in_wr),               // Write enable
+         .rd_en (in_fifo_rd_en),       // Read the next word
+         .dout ({in_fifo_ctrl_dout, in_fifo_data_dout}),
+         .full (),
+         .prog_full (),
+         .nearly_full (in_fifo_nearly_full),
+         .empty (in_fifo_empty),
+         .reset (reset),
+         .clk (clk)
+         );
+
+   small_fifo #(.WIDTH(160), .MAX_DEPTH_BITS(2))
+      dst_port_fifo
+        (.din ({message, comm_id, topo_type, node_type, rank, root, size, op, count, data_type, on_the_path}),
+         .wr_en (decode_done),             // Write enable
+         .rd_en (dst_port_rd),       // Read the next word
+         .dout ({message_latched, comm_id_latched, topo_type_latched, node_type_latched,
+		 rank_latched, root_latched, size_latched, op_latched, 
+		 count_latched, data_type_latched, on_the_path_latched}),
+         .full (),
+         .prog_full (),
+         .nearly_full (dst_port_fifo_nearly_full),
+         .empty (dst_port_fifo_empty),
+         .reset (reset),
+         .clk (clk)
+         );
+
+   //----------------------- Logic -----------------------------
+
+   assign    in_rdy = !in_fifo_nearly_full && !dst_port_fifo_nearly_full;
+
+   /* pkt is from the cpu if it comes in on an odd numbered port */
+   assign pkt_is_from_cpu = in_fifo_data_dout[`IOQ_SRC_PORT_POS];
+
+   /* Decode the source port */
+   always @(*) begin
+      decoded_src = 0;
+      decoded_src[in_fifo_data_dout[`IOQ_SRC_PORT_POS+15:`IOQ_SRC_PORT_POS]] = 1'b1;
+   end
+
+   /*********************************************************************
+    * Wait until the ethernet header has been decoded and the output
+    * port is found, then write the module header and move the packet
+    * to the output
+    **********************************************************************/
+    always @(*) begin
+       out_ctrl           = in_fifo_ctrl_dout;
+       out_data           = in_fifo_data_dout;
+       state_next	  = state;
+       reduce_state_next = reduce_state;
+       out_wr 	       	  = 0;
+       in_fifo_rd_en 	  = 0;
+       dst_port_rd 	  = 0;
+       word_count_next    = word_count;
+       data_count_next    = data_count;
+       src_ip_next        = src_ip;
+       dst_ip_next        = dst_ip;
+       ip_cksum_next      = ip_cksum;
+       
+       case(state)
+	 WAIT_TILL_DONE_DECODE: begin
+	    if(!dst_port_fifo_empty) begin
+	       dst_port_rd     = 1;
+	       state_next      = WRITE_HDR;
+	       in_fifo_rd_en   = 1;
+	    end
+	 end
+	 
+       	 // write Destionation output ports */
+       	 WRITE_HDR: begin
+	    if(out_rdy) begin
+	       out_wr = 1;
+	       in_fifo_rd_en = 1;
+	       //reduce traffic
+	       if(reduce_pkt && !not_reduce_pkt && in_fifo_ctrl_dout==`IO_QUEUE_STAGE_NUM) begin
+		  out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = 0;
+		  case (topo_type_latched)
+		    TOPO_RING: begin
+		       if(node_type_latched == NODE_RING_EDGE &&
+			  pkt_is_from_cpu &&
+			  reduce_state == REDUCE_IDLE) begin
+			  if(rank_latched < root_latched )begin
+			     out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000001};
+			  end
+			  else begin
+			     out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000100};
+			  end
+			  state_next = UPDATE_REDUCE_MSG;
+		       end // if (node_type_latched == NODE_RING_EDGE &&...
+
+		       else if(node_type_latched == NODE_RING_INTERNAL_L &&
+			       pkt_is_from_cpu &&
+			       reduce_state == REDUCE_IDLE) begin
+			  reduce_state_next == REDUCE_HR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_INTERNAL_L &&
+			       pkt_is_from_B &&
+			       reduce_state == REDUCE_IDLE) begin
+			  reduce_state_next == REDUCE_LR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_INTERNAL_L &&
+			       pkt_is_from_cpu &&
+			       reduce_state == REDUCE_LR) begin
+			  reduce_state_next == REDUCE_IDLE;
+			  state_next = UPDATE_REDUCE_MSG;
+			  out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000001};
+		       end
+		       else if(node_type_latched == NODE_RING_INTERNAL_L &&
+			       pkt_is_from_B &&
+			       reduce_state == REDUCE_HR) begin
+			  reduce_state_next == REDUCE_IDLE;
+			  state_next = UPDATE_REDUCE_MSG;
+			  out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000001};
+		       end
+
+		       else if(node_type_latched == NODE_RING_INTERNAL_R &&
+			       pkt_is_from_cpu &&
+			       reduce_state == REDUCE_IDLE) begin
+			  reduce_state_next == REDUCE_HR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_INTERNAL_R &&
+			       pkt_is_from_A &&
+			       reduce_state == REDUCE_IDLE) begin
+			  reduce_state_next == REDUCE_RR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_INTERNAL_R &&
+			       pkt_is_from_cpu &&
+			       reduce_state == REDUCE_RR) begin
+			  reduce_state_next == REDUCE_IDLE;
+			  state_next = UPDATE_REDUCE_MSG;
+			  out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000100};
+		       end
+		       else if(node_type_latched == NODE_RING_INTERNAL_R &&
+			       pkt_is_from_A &&
+			       reduce_state == REDUCE_HR) begin
+			  reduce_state_next == REDUCE_IDLE;
+			  state_next = UPDATE_REDUCE_MSG;
+			  out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000100};
+		       end
+
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_cpu &&
+			       reduce_state == REDUCE_IDLE) begin
+			  reduce_state_next = REDUCE_HR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_A &&
+			       reduce_state == REDUCE_IDLE) begin
+			  reduce_state_next = REDUCE_RR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_B &&
+			       reduce_state == REDUCE_IDLE) begin
+			  reduce_state_next = REDUCE_LR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_cpu &&
+			       reduce_state == REDUCE_IDLE) begin
+			  reduce_state_next = REDUCE_HR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_A &&
+			       reduce_state == REDUCE_HR) begin
+			  reduce_state_next = REDUCE_RHR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_B &&
+			       reduce_state == REDUCE_HR) begin
+			  reduce_state_next = REDUCE_LHR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_cpu &&
+			       reduce_state == REDUCE_LR) begin
+			  reduce_state_next = REDUCE_HLR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_A &&
+			       reduce_state == REDUCE_LR) begin
+			  reduce_state_next = REDUCE_RLR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_cpu &&
+			       reduce_state == REDUCE_RR) begin
+			  reduce_state_next = REDUCE_HRR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_B &&
+			       reduce_state == REDUCE_RR) begin
+			  reduce_state_next = REDUCE_LRR;
+			  state_next = UPDATE_REDUCE_MSG;
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_cpu &&
+			       (reduce_state == REDUCE_RLR || reduce_state == REDUCE_LRR)) begin
+			  reduce_state_next = REDUCE_IDLE;
+			  state_next = UPDATE_REDUCE_MSG;
+			  out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000010};
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_A &&
+			       (reduce_state == REDUCE_HLR || reduce_state == REDUCE_LHR)) begin
+			  reduce_state_next = REDUCE_IDLE;
+			  state_next = UPDATE_REDUCE_MSG;
+			  out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000010};
+		       end
+		       else if(node_type_latched == NODE_RING_TARGET &&
+			       pkt_is_from_B &&
+			       (reduce_state == REDUCE_HRR || reduce_state == REDUCE_RHR)) begin
+			  reduce_state_next = REDUCE_IDLE;
+			  state_next = UPDATE_REDUCE_MSG;
+			  out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000010};
+		       end
+		    end
+		    default: begin
+		       state_next = WAIT_EOP;
+		    end
+		  endcase
+	       end // if (reduce_pkt && !not_reduce_pkt && in_fifo_ctrl_dout==`IO_QUEUE_STAGE_NUM)
+	       //regular ethernet NIC traffic
+	       else if(!reduce_pkt && not_reduce_pkt) begin
+		  if(in_fifo_ctrl_dout==`IO_QUEUE_STAGE_NUM) begin
+		     if(pkt_is_from_cpu) begin		    					 
+			out_data[`IOQ_DST_PORT_POS + 15:`IOQ_DST_PORT_POS] = {1'b0, decoded_src[15:1]};
+		     end
+		     else begin
+			out_data[`IOQ_DST_PORT_POS + 15:`IOQ_DST_PORT_POS] = {decoded_src[14:0], 1'b0};
+		     end
+		  end
+		  state_next = WAIT_EOP;
+	       end	
+	       //contingency case, packet is dropped since not classified.
+	       else begin 
+		  if(in_fifo_ctrl_dout==`IO_QUEUE_STAGE_NUM) begin
+		     out_data[`IOQ_DST_PORT_POS + 15:`IOQ_DST_PORT_POS] = 0;
+		  end
+		  state_next = WAIT_EOP;
+	       end
+	    end
+	 end
+	 
+	 UPDATE_REDUCE_MSG: begin
+	    if(in_fifo_ctrl_dout!=255 & out_rdy) begin
+	       out_wr = 1;
+	       if(word_count==3) begin
+		  if( reduce_state == AT_REDUCE && 
+		      node_type_latched == NODE_HEAD && 
+		      topo_type_latched == TOPO_RING) begin
+		     src_ip_next = in_fifo_data_dout[47:16];
+		     dst_ip_next[31:16] = in_fifo_data_dout[15:0];
+		     ip_cksum_next = in_fifo_data_dout[63:48];
+		  end
+		  else if( reduce_state == WAIT_NETWORK && 
+			   node_type_latched == NODE_NODE && 
+			   topo_type_latched == TOPO_RING) begin
+		     src_ip_next = in_fifo_data_dout[47:16];
+		     dst_ip_next[31:16] = in_fifo_data_dout[15:0];
+		     ip_cksum_next = in_fifo_data_dout[63:48];
+		  end 
+		  else if( reduce_state == WAIT_NOTIFICATION && 
+			   node_type_latched == NODE_NODE && 
+			   message_latched == MSG_PREV_AT_REDUCE &&
+			   topo_type_latched == TOPO_RING) begin
+		     src_ip_next = in_fifo_data_dout[47:16];
+		     dst_ip_next[31:16] = in_fifo_data_dout[15:0];
+		     ip_cksum_next = in_fifo_data_dout[63:48];
+		  end
+		  else if( reduce_state == REDUCE_IDLE && 
+			   topo_type_latched == TOPO_RING) begin	 
+		     out_data = {ip_cksum, dst_ip,src_ip[31:16]};
+		     //out_data[15:0] = src_ip_latched[31:16];
+		     //out_data[63:48] = ip_cksum_latched;		     
+		  end
+	       end
+	       
+	       if(word_count==4) begin
+		  if( reduce_state == AT_REDUCE && 
+		      node_type_latched == NODE_HEAD && 
+		      topo_type_latched == TOPO_RING) begin
+		     dst_ip_next[15:0] = in_fifo_data_dout[63:48];
+		  end
+		  else if( reduce_state == WAIT_NETWORK && 
+			   node_type_latched == NODE_NODE && 
+			   topo_type_latched == TOPO_RING) begin
+		     dst_ip_next[15:0] = in_fifo_data_dout[63:48];
+		  end 
+		  else if( reduce_state == WAIT_NOTIFICATION && 
+			   node_type_latched == NODE_NODE && 
+			   message_latched == MSG_PREV_AT_REDUCE &&
+			   topo_type_latched == TOPO_RING) begin
+		     dst_ip_next[15:0] = in_fifo_data_dout[63:48];
+		  end
+		  else if( reduce_state == REDUCE_IDLE && 
+			   topo_type_latched == TOPO_RING) begin	
+		     out_data[63:48] = src_ip[15:0];
+		  end
+	       end
+	       
+	       if(word_count==5) begin
+		  if( reduce_state == AT_REDUCE && 
+		      node_type_latched == NODE_HEAD && 
+		      topo_type_latched == TOPO_RING) begin
+		     out_data[47:32] = MSG_PREV_AT_REDUCE;
+		     out_data[7:0] = NODE_NODE;
+		     out_data[63:48] = 0;
+		  end
+		  else if( reduce_state == REDUCE_IDLE && 
+			   node_type_latched == NODE_NODE && 
+			   topo_type_latched == TOPO_RING) begin
+		     out_data[47:32] = MSG_RELEASE_REDUCE;
+		     out_data[63:48] = 0;
+		  end 
+		  else if( reduce_state == WAIT_NOTIFICATION && 
+			   node_type_latched == NODE_NODE && 
+			   topo_type_latched == TOPO_RING) begin
+		     out_data[47:32] = MSG_PREV_AT_REDUCE;
+		     out_data[63:48] = 0;
+		  end
+		  word_count_next = 0;
+		  state_next = UPDATE_REDUCE_BUFFER;
+	       end
+	       else begin
+		  word_count_next = word_count+1;	
+	       end
+	    end	
+	    if(!in_fifo_empty & out_rdy) begin
+	       in_fifo_rd_en   = 1;
+	       //out_wr          = 1;
+	    end
+	 end // case: UPDATE_REDUCE_MSG
+
+	 UPDATE_REDUCE_BUFFER: begin
+	    if(in_fifo_ctrl_dout!=255 & out_rdy) begin
+	       out_wr = 1;
+	       if(data_count < count_latched ) begin
+		  if( reduce_state == REDUCE_IDLE ) begin
+		     if(data_type_latched == DATA_INT) begin
+			if(op_latched == OP_ADD) begin
+			   out_data[63:32] = in_fifo_data_dout[63:32] + buffer[data_count>>1][63:32];
+			   out_data[31:0] = in_fifo_data_dout[31:0] + buffer[data_count>>1][31:0];
+			   buffer_next[data_count>>1]=0;
+			   data_count_next = data_count+2;
+			end
+		     end
+		  end
+		  else if( reduce_state == REDUCE_HR || 
+			   reduce_state == REDUCE_LR || 
+			   reduce_state == REDUCE_RR ) begin
+		     if(data_type_latched == DATA_INT) begin
+			buffer_next[data_count>>1] = in_fifo_data_dout;
+			data_count_next = data_count + 2;
+		     end
+		  end
+		  else begin
+		     if(op_latched == OP_ADD) begin
+			buffer_next[data_count>>1][63:32] = buffer[data_count>>1][63:32] + in_fifo_data_dout[63:32];
+			buffer_next[data_count>>1][31:0] = buffer[data_count>>1][31:0] + in_fifo_data_dout[31:0];
+			data_count_next = data_count + 2;
+			
+		  end
+		  
+		    
+		  
+	       end // if (data_count < count_latched )
+	       		 
+	    end
+	    else begin
+	       data_count_next = 0;
+	       state_next = WAIT_EOP;
+	    end
+	    
+	    if(!in_fifo_empty & out_rdy) begin
+	       in_fifo_rd_en   = 1;
+	       //out_wr          = 1;
+	    end
+	 end
+	 
+
+
+         // write all data 
+         WAIT_EOP: begin
+	    if(in_fifo_ctrl_dout!=0)begin
+	       if(out_rdy) begin
+		  state_next   = WAIT_TILL_DONE_DECODE;
+		  out_wr       = 1;
+	       end
+	    end
+	    else if(!in_fifo_empty & out_rdy) begin
+	       in_fifo_rd_en   = 1;
+	       out_wr          = 1;
+	    end
+	 end // case: WAIT_EOP
+       endcase // case(state)
+    end // always @ (*)
+
+   always @(posedge clk) begin
+      if(reset) begin
+	 state	      	<= WAIT_TILL_DONE_DECODE;
+	 reduce_state 	<= REDUCE_IDLE;
+	 word_count    	<= 0;
+	 data_count     <= 0;
+	 lut_ptr        <= 0;
+	 src_ip         <= 0;
+	 dst_ip         <= 0;
+	 ip_cksum       <= 0;
+	 for(i=0;i<256;i=i+1) begin
+	    buffer[i] <= 0;
+	 end
+      end
+      else begin
+	 state	       	<= state_next;
+	 reduce_state 	<= reduce_state_next;
+	 word_count    	<= word_count_next;
+	 data_count     <= data_count_next;
+	 lut_ptr        <= lut_ptr_next;
+	 src_ip         <= src_ip_next;
+	 dst_ip         <= dst_ip_next;
+	 ip_cksum       <= ip_cksum_next;
+	 for(i=0;i<256;i=i+1) begin
+	    buffer[i] <= buffer_next[i];
+	 end
+      end
+   end
+endmodule // switch_output_port
+

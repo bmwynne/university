@@ -1,0 +1,30 @@
+Brandon Wynne
+Partner: Paul Conway
+Date: 2-13-2014
+C335 Lab 4
+
+
+Results:
+
+We were able to complete all of the tasks within laboratory 4. We were able to turn on a light, turn on
+multiple lights, and sequencially light all of the leds. We were also able to seperate the code from 
+the main.c file into the corresponding led driver.
+
+Difficulties:
+
+There were some difficulties within this lab. At first getting to understand the board and documentation was
+a little daunting. Although through studying the schematics and lab details we were able to overcome this. 
+The second difficulty was producing the sequencial order of leds. The problem was not the logic, but rather
+the order of pins within the on and off section of the driver. For some reason if the on and off section of
+pins were not coded correspondingly, the leds would light up sequencially in pairs. This was fixed when
+both on and off were coded from 9-15 and 8, correpsondingly. 
+
+What did you learn:
+
+I felt like I personally learned a lot in this lab and it has been my favorite lab as a undergrad
+in CS. I have always wanted to work with hardware and this was my first chance. It seemed very
+daunting at first but once I learned how the pins worked with the source code, it was much easier.
+I felt like I learned a lot about coding on hardware while not being able to use a debugger, and the
+challenges that follow. I also learned how to overcome through tedious watch of code.
+
+

@@ -1,0 +1,12 @@
+
+****** Webtalk v2015.2 (64-bit)
+  **** SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+  **** IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+    ** Copyright 1986-2015 Xilinx, Inc. All Rights Reserved.
+
+source /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab10/Lab10.hw/webtalk/labtool_webtalk.tcl -notrace
+
+    while executing
+"webtalk_transmit -clientid 4198087815 -regid "207618128_207303612_210589413_744" -xml /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab1..."
+    (file "/nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab10/Lab10.hw/webtalk/labtool_webtalk.tcl" line 28)
+INFO: [Common 17-206] Exiting Webtalk at Wed Nov  4 18:17:17 2015...

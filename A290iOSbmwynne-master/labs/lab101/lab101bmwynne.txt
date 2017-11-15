@@ -1,0 +1,44 @@
+1. Name, Major, Class Year:
+Brandon Wynne, Computer Science, Senior Fall 2016
+
+2. Why are you taking this course?
+I am taking this course to further learn iOS development. I have previous
+experience making ios applications with objective C.
+
+3. Do you have any previous iOS programming experience?
+Yes, as seen in question two. I have experience with the iOS MVC and minimal
+Swift 1 and Objective C iterations.
+
+4. Do you have any mobile programming experience?
+I have experience programming embedded devices on ARM-Cores as well as minimal
+experience on iOS and Android applications.
+
+5. Do you have any Mac OS X programming Experience?
+I have no experience developing applications for Mac OS X, however I have
+experience working with the filesystem and grand central schedular.
+
+6. What is your previous programming experience?
+I focus my programming experience around systems engineering. I have much
+experience programming with C and C++. Other languages include: Verilog, Java,
+C#, and web development core languages.
+
+7. When did you take programming classes?
+I have completed all programming class requirments for a B.S. in Computer
+Science as Spring 2016.
+
+8. Your self-confidence in programming?
+10.
+
+9. What would you like to be able to achieve with iOS Application Development?
+I would like to better understand the structure of iOS development, utilize
+advanced libraries, and create robust applications that are power efficient,
+multi-threaded, and distributed.
+
+10. What are your concerns about this course?
+I have no concerns.
+
+11. Do you own an iOS device...?
+Yes I own an iPhone 6S Plus and an iPad Air GenI.
+
+12. Do you own a laptop running OS X 10.10?
+Yes I own a mid 2012 13" Macbook Pro. I will be using it for the course.

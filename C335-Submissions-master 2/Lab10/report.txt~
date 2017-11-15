@@ -1,0 +1,37 @@
+Name: Brandon Wynne
+Lab Partner: Paul Conway
+Date: April 03, 2014
+Lab: 10
+
+Difficulties:
+-----------------------------------------------------------------------
+
+
+
+
+
+What did I learn?
+-----------------------------------------------------------------------
+
+
+
+
+
+
+Questions:
+-----------------------------------------------------------------------
+
+1. Real-time clocks (RTC) are integrated circuits that keep track of current
+time. RTCs are different from ordinary hardware clocks because ordinary 
+hardware clocks instead count time in non human units. There are several
+benefits to using RTCs:
+- Low power consumption
+- Frees the main system for time-critical tasks
+- Sometimes more accurate than other methods
+
+2. Using the f3d_delay_uS() function is more accurate than the delay loop. The
+delay has an advantage of being more accurate because it frees the system from
+calculations and uses an integrated circuit rather than signals between
+registers.
+
+3. 

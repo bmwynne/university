@@ -1,0 +1,27 @@
+Name: Brandon Wynne
+Partner: Paul Conway
+Date: January 17, 2015
+Class: P442 Embedded Digital Systems
+
+File Lab 1:
+      Report.txt
+
+ 
+
+Results:
+	In this lab my partner and I were able to create an egg timer on the discovery board. This processes was complicated at first because we had both forgotten -
+	- useful skills developed in C335. Once we were up to speed on old habits, we started to make headway upon reading the documentation and checking source code.
+	First we printed a hello to the screen  through, the old faithful, serialT. This was reassuring. Then we read, stored, and manipulated data from serialT -
+	- this was even more reassuring. Finally, through a couple hours of researching documentation and source code, we felt comfortable enough with threads in ChibiOS -
+	- and we were able to complete the lab.
+
+Difficulties:
+
+	The initial learning curve lost since Spring 2014 was our biggest difficulty initially. We had to familiarize ourselves with the ChibiOS documentation.
+	Once we were able to write data to the screen we encountered our first problem -- converting a character from user input into an integer. This was fixed through -
+	- our our own implementation of C's atoi() function.
+
+	Our most rough time with the assignment was learning how ChibiOS handles threads. We spent quite a while trying to "kill" a thread completely. However, after -
+	- some research we learned that threads cannot be "destroyed" in ChibiOS for safety of memory management. The chThreadExit() function sufficed. Once we learned -
+	- more concepts of threads (i.e. how the schedular handles them and implements them in memory) from the documentation we easily completed the assignment. 
+	

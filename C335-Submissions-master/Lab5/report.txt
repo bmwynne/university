@@ -1,0 +1,37 @@
+Brandon Wynne
+Lab Partner: Paul Conway
+
+Results:
+
+In this lab my lab partner and I were able to accomplish everything 
+sucessfully, with problems only occuring in the beginning. Following
+the c335 lab manual was pretty straight forward also, although 
+there were some parts that were out of date and were hard to follow.
+We were able to sucesfully run the Salae analyzer with the UART
+and connect to it via the tty-USB0. The analyzer was interesting to use 
+because it tracked input sent from the computer, and checked if the 
+hardware recieved the output. This was visualized with graph like lines.
+I was semi familliar with this program because I have used something like 
+it called GTK Wave. The Putchar and Getchar functions worked as well,
+with a small error coming from Putchar. Adding the WC program from Lab 2 was
+also easy with no problems. 
+
+Difficulties:
+There were difficulties following the lab manual and inputting
+the baud rate for the UART. The baud rate was much higher and 
+we had to adjust it. Unfortunately this was not in the lab manual
+and we had to figure it out the hard way.
+
+Another difficulty was when we copy and pasted the putchar from the
+lab git hub, the " ' ' " were interpretted as invalid characters,
+and the function did not work. When we typed them in manually it worked.
+
+
+
+
+What did you learn:
+I learned how to use a Saelae logic analyzer and to hook up wires to
+different pins to get the UART to work. I also continued to learn that
+it is hard to program on hardware without debugging. We also learned 
+how to print to the computer from the hardware.
+

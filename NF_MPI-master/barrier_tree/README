@@ -1,0 +1,52 @@
+This is a myhdl simulation environment for a proposed NetFPGA based barrier implementation for output_port_lookup module. output_port_lookup module is the module for routing the packets in NetFPGA suite. Therefore, we need special routing for barrier packets that could reduce the number of packets going around the network and between the NetFPGA and the host.
+
+This version have both support for ring topology and binary tree topology but the simulation task is just for a perfect full tree topology.. The communication between python entities, which are actually standalone python processes, are done via unix domain name sockets. It is used in place of named pipes because of duplex nature instead of one way data communication. This could be recoded if necessary.
+
+The current version is not too configurable, and most things are hardcoded in the files. 
+
+Here is a sample run for this simulation with 7 hosts connected to each other in a tree topology.
+
+- You need to open 14 different terminals go into the current directory $NF_MPI_ROOT/barrier_tree in each terminal
+
+- In the first 7 terminal run opl_cosim.py individually with passing paramenters for the location of unix domain sockes. It needs to be in order and last one should connect to the first one to build a ring. Another important point is that one of them HAVE TO to be specified as head. Here is the generic command for head and other type of nodes
+  	for the root node:
+  		python root/opl_cosim.py root <server_address>
+  		
+  	for the leaf nodes:
+  		python leaf/opl_cosim.py leaf <server_address> <parent_address>
+  	
+  	for the middle nodes:
+  		python leaf/opl_cosim.py <server_address> <parent_address>
+  	
+  	Example:
+     python root/opl_cosim.py root ../1
+     python middle1/opl_cosim.py ../2 ../1
+     python middle2/opl_cosim.py ../3 ../1
+     python leaf1/opl_cosim.py leaf ../4 ../2
+     python leaf2/opl_cosim.py leaf ../5 ../2
+     python leaf3/opl_cosim.py leaf ../6 ../3
+     python leaf4/opl_cosim.py leaf ../7 ../3
+     
+
+- Once previous step is done, the mydhl process are going to be connected to each other. They act as our so called network interface cards. The simulation is ready to run.
+
+- On the remaining 7 terminals run client.py which are calling a barrier function. The need to specify the unix domain sockets in the command line and if it is the root or leaf node. No need to mention the type of node if it is middle node
+	python root/client.py <server_address> root
+	python middle/client.py <server_address>
+	python leaf/client.py <server_address> leaf
+	
+	Example for the above config:
+     python root/client.py ../1 root
+     python middle1/client.py ../2
+     python middle2/client.py ../3
+     python leaf1/client.py ../4 leaf
+	 python leaf2/client.py ../5 leaf
+	 python leaf3/client.py ../6 leaf
+	 python leaf4/client.py ../7 leaf
+	 
+All there clients are going to receive barrier release message after all 7 client reaches barrier. Once a process is killed manually, the rest is going to stop. The exit algorithm has not been implemented yet. The cycle time is set to 1 second, so it takes time to finish all the barrier release messages.
+
+The order which clients runs when is NOT important. 
+
+ 
+

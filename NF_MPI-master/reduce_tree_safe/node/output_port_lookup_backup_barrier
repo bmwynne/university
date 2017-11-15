@@ -1,0 +1,666 @@
+///////////////////////////////////////////////////////////////////////////////
+// vim:set shiftwidth=3 softtabstop=3 expandtab:
+// $Id: output_port_lookup.v 5240 2009-03-14 01:50:42Z grg $
+//
+// Module: switch_output_port.v
+// Project: NF2.1
+// Description: reads incoming packets parses them and decides on the output port
+///////////////////////////////////////////////////////////////////////////////
+`timescale 1ns/1ps
+  module output_port_lookup
+    #(parameter DATA_WIDTH = 64,
+      parameter CTRL_WIDTH=DATA_WIDTH/8,
+      parameter UDP_REG_SRC_WIDTH = 2,
+      parameter INPUT_ARBITER_STAGE_NUM = 2,
+      parameter NUM_OUTPUT_QUEUES = 8,
+      parameter STAGE_NUM = 4,
+      parameter NUM_IQ_BITS = 3)
+
+   (// --- data path interface
+    output reg [DATA_WIDTH-1:0]        out_data,
+    output reg [CTRL_WIDTH-1:0]        out_ctrl,
+    output reg                         out_wr,
+    input                              out_rdy,
+
+    input  [DATA_WIDTH-1:0]            in_data,
+    input  [CTRL_WIDTH-1:0]            in_ctrl,
+    input                              in_wr,
+    output                             in_rdy,
+
+    // --- Register interface
+    input                              reg_req_in,
+    input                              reg_ack_in,
+    input                              reg_rd_wr_L_in,
+    input  [`UDP_REG_ADDR_WIDTH-1:0]   reg_addr_in,
+    input  [`CPCI_NF2_DATA_WIDTH-1:0]  reg_data_in,
+    input  [UDP_REG_SRC_WIDTH-1:0]     reg_src_in,
+
+    output                             reg_req_out,
+    output                             reg_ack_out,
+    output                             reg_rd_wr_L_out,
+    output  [`UDP_REG_ADDR_WIDTH-1:0]  reg_addr_out,
+    output  [`CPCI_NF2_DATA_WIDTH-1:0] reg_data_out,
+    output  [UDP_REG_SRC_WIDTH-1:0]    reg_src_out,
+
+
+    // --- Misc
+    input                              clk,
+    input                              reset);
+
+   function integer log2;
+      input integer number;
+      begin
+	     log2=0;
+         while(2**log2<number) begin
+            log2=log2+1;
+         end
+      end
+   endfunction // log2
+
+   //--------------------- Internal Parameter-------------------------
+   parameter LUT_DEPTH_BITS = 4;
+   parameter DEFAULT_MISS_OUTPUT_PORTS = 8'b01010101; // exclude the CPU queues
+
+   parameter NUM_STATES            = 4;
+   parameter WAIT_TILL_DONE_DECODE = 1;
+   parameter WRITE_HDR             = 2;
+   parameter WAIT_EOP              = 8;
+   parameter WAIT_PAYLOAD          = 3;
+   parameter UPDATE_BR_MSG         = 4;
+
+   localparam LOOPEND           = 256;
+   
+   
+   localparam BR_IDLE           = 0;
+   localparam AT_BR             = 1;
+   localparam WAIT_CPU          = 2;
+   localparam WAIT_NETWORK      = 3;
+   localparam WAIT_NOTIFICATION = 4;
+   localparam TREE_HB	        = 5;
+   localparam TREE_CB  		= 6;
+   localparam TREE_HCB	      	= 7;
+   localparam TREE_CHB 		= 8;
+   localparam TREE_CCB 		= 9;
+   localparam TREE_R_HB		= 10;
+   localparam TREE_R_HCB       	= 11;
+   localparam TREE_R_CHB       	= 12;
+   
+   localparam BUTTERFLY_H	= 13;
+   localparam BUTTERFLY_A      	= 14;
+   localparam BUTTERFLY_B      	= 15;
+   localparam BUTTERFLY_C      	= 16;
+   localparam BUTTERFLY_D      	= 17;
+   localparam BUTTERFLY_HA     	= 18;
+   localparam BUTTERFLY_HB     	= 19;
+   localparam BUTTERFLY_HC     	= 20;
+   localparam BUTTERFLY_AH     	= 21;
+   localparam BUTTERFLY_AB     	= 22;
+   localparam BUTTERFLY_AC     	= 23;
+   localparam BUTTERFLY_BH     	= 24;
+   localparam BUTTERFLY_BA     	= 25;
+   localparam BUTTERFLY_BC     	= 26;
+   localparam BUTTERFLY_CH     	= 27;
+   localparam BUTTERFLY_CA     	= 28;
+   localparam BUTTERFLY_CB     	= 29;
+   localparam BUTTERFLY_HAB    	= 30;
+   localparam BUTTERFLY_HBC    	= 32;
+   localparam BUTTERFLY_HCB    	= 33;
+   localparam BUTTERFLY_HAC    	= 34;
+   localparam BUTTERFLY_HCA    	= 35;
+   localparam BUTTERFLY_AHB    	= 36;
+   localparam BUTTERFLY_ABH    	= 37;
+   localparam BUTTERFLY_ABC    	= 38;
+   localparam BUTTERFLY_ACB    	= 39;
+   localparam BUTTERFLY_AHC    	= 40;
+   localparam BUTTERFLY_ACH    	= 41;
+   localparam BUTTERFLY_BAH    	= 42;
+   localparam BUTTERFLY_BHA    	= 43;
+   localparam BUTTERFLY_BHC    	= 44;
+   localparam BUTTERFLY_BCH    	= 45;
+   localparam BUTTERFLY_BAC    	= 46;
+   localparam BUTTERFLY_BCA    	= 47;
+   localparam BUTTERFLY_CAB    	= 48;
+   localparam BUTTERFLY_CBA    	= 49;
+   localparam BUTTERFLY_CBH    	= 50;
+   localparam BUTTERFLY_CHB    	= 51;
+   localparam BUTTERFLY_CAH    	= 52;
+   localparam BUTTERFLY_CHA    	= 53;
+   
+   localparam TOPO_RING		   = 1;
+   localparam TOPO_TREE		   = 2;
+   localparam TOPO_BUTTERFLY       = 3;
+   localparam TOPO_TRUNK	   = 4;
+   localparam TOPO_CENTRAL         = 5;
+   
+   localparam NODE_HEAD		   = 1;
+   localparam NODE_NODE		   = 2;
+   localparam NODE_LEAF		   = 3;
+   localparam NODE_ROOT		   = 4;
+   localparam NODE_CENTER	   = 5;
+   localparam NODE_TRUNK	   = 6;
+   
+   localparam MSG_AT_BR        	  = 65;   
+   localparam MSG_PREV_AT_BR   	  = 66;
+   localparam MSG_RLS_BR          = 67;
+   localparam MSG_CHILD_AT_BR	  = 68;
+   
+   
+   //---------------------- Wires and regs----------------------------
+
+   wire                         lookup_ack;
+   //wire [47:0] 			dst_mac;
+   //wire [47:0]                  src_mac;
+   wire [15:0]                  ethertype;
+   wire [NUM_IQ_BITS-1:0]       src_port;
+   wire                         decode_done;
+   wire			      	barrier_pkt;
+   wire	       			not_barrier_pkt;
+   wire [15:0]	       		message;
+   wire [15:0]		       	comm_id;
+   wire [7:0]	       		topo_type;
+   wire [7:0]		       	node_type;
+   wire [15:0]       		comm_id_latched;
+   wire [7:0]                   topo_type_latched;
+   wire [7:0]                   node_type_latched;
+   wire [15:0]		       	message_latched;
+
+   reg [31:0] 			src_ip, src_ip_next;
+   reg [31:0] 			dst_ip, dst_ip_next;
+   reg [15:0] 			ip_cksum, ip_cksum_next; 			
+   reg [47:0] 			src_mac, src_mac_next;
+   reg [47:0] 			dst_mac, dst_mac_next;
+   reg [15:0] 			udp_src, udp_src_next;
+   reg [15:0] 			udp_dst, udp_dst_next;
+   
+   
+   wire [47:0] 			src_mac_cur;
+   wire [47:0] 			dst_mac_cur;
+   wire [31:0] 			src_ip_cur;
+   wire [31:0] 			dst_ip_cur;
+   wire [15:0] 			ip_cksum_cur;
+   wire [15:0] 			udp_src_cur;
+   wire [15:0] 			udp_dst_cur;
+ 			
+			
+   wire [NUM_OUTPUT_QUEUES-1:0] dst_ports;
+   wire [NUM_OUTPUT_QUEUES-1:0] dst_ports_latched;
+
+   wire [LUT_DEPTH_BITS-1:0]    rd_addr;          // address in table to read
+   wire                         rd_req;           // request a read
+   wire [NUM_OUTPUT_QUEUES-1:0] rd_oq;            // data read from the LUT at rd_addr
+   wire                         rd_wr_protect;    // wr_protect bit read
+   wire [47:0]                  rd_mac;           // data to match in the CAM
+   wire                         rd_ack;           // pulses high when data is rdy
+
+   wire [LUT_DEPTH_BITS-1:0]    wr_addr;
+   wire                         wr_req;
+   wire [NUM_OUTPUT_QUEUES-1:0] wr_oq;
+   wire                         wr_protect;       // wr_protect bit to write
+   wire [47:0]                  wr_mac;           // data to match in the CAM
+   wire                         wr_ack;           // pulses high when wr is done
+
+   wire                         lut_hit;          // pulses high on a hit
+   wire                         lut_miss;         // pulses high on a miss
+
+   reg                          in_fifo_rd_en;
+   wire [CTRL_WIDTH-1:0]        in_fifo_ctrl_dout;
+   wire [DATA_WIDTH-1:0]        in_fifo_data_dout;
+   wire                         in_fifo_nearly_full;
+   wire                         in_fifo_empty;
+
+   reg                          dst_port_rd;
+   wire                         dst_port_fifo_nearly_full;
+   wire                         dst_port_fifo_empty;
+
+   reg [15:0]		       	decoded_src;
+
+   reg [NUM_STATES-1:0]         state, state_next;
+   reg [6:0]   			barrier_state, barrier_state_next;
+   reg [2:0]	       		word_count, word_count_next;
+
+   reg [63:0] 			buffer [0:255];
+   reg [8:0] 			buffer_rd_addr, buffer_rd_addr_next;
+   reg [8:0] 			buffer_wr_addr, buffer_wr_addr_next;
+   reg [63:0] 			buffer_rd_data, buffer_rd_data_next;
+   reg [63:0] 			buffer_wr_data, buffer_wr_data_next;
+   reg 				buffer_wr_en, buffer_wr_en_next;
+ 			
+   
+   //------------------------- Modules-------------------------------
+   is_barrier_pkt
+     #(.DATA_WIDTH (DATA_WIDTH),
+       .CTRL_WIDTH (CTRL_WIDTH),
+       .NUM_IQ_BITS(NUM_IQ_BITS),
+       .INPUT_ARBITER_STAGE_NUM(INPUT_ARBITER_STAGE_NUM))
+     is_barrier_pkt
+       (.in_data(in_data),
+        .in_ctrl(in_ctrl),
+        .in_wr(in_wr),
+        .barrier_pkt (barrier_pkt),
+        .not_barrier_pkt (not_barrier_pkt),
+        .decode_done (decode_done),
+        .message (message),
+        .comm_id (comm_id),
+        .topo_type (topo_type),
+        .node_type (node_type),
+	.src_mac (src_mac_cur),
+	.dst_mac (dst_mac_cur),
+	.src_ip (src_ip_cur),
+	.dst_ip (dst_ip_cur),
+	.ip_cksum (ip_cksum_cur),
+	.udp_src (udp_src_cur),
+	.udp_dst (udp_dst_cur),
+        .reset(reset),
+        .clk(clk));
+   
+   /* The size of this fifo has to be large enough to fit the previous modules' headers
+    * and the ethernet header */
+   small_fifo #(.WIDTH(DATA_WIDTH+CTRL_WIDTH), .MAX_DEPTH_BITS(4))
+   input_fifo
+     (.din ({in_ctrl,in_data}),     // Data in
+      .wr_en (in_wr),               // Write enable
+      .rd_en (in_fifo_rd_en),       // Read the next word
+      .dout ({in_fifo_ctrl_dout, in_fifo_data_dout}),
+      .full (),
+      .prog_full (),
+      .nearly_full (in_fifo_nearly_full),
+      .empty (in_fifo_empty),
+      .reset (reset),
+      .clk (clk)
+      );
+   
+   small_fifo #(.WIDTH(48), .MAX_DEPTH_BITS(2))
+   dst_port_fifo
+     (.din ({message, comm_id, topo_type, node_type}),     // Data in
+      .wr_en (decode_done),             // Write enable
+      .rd_en (dst_port_rd),       // Read the next word
+      .dout ({message_latched, comm_id_latched, topo_type_latched, node_type_latched}),
+      .full (),
+      .prog_full (),
+      .nearly_full (dst_port_fifo_nearly_full),
+      .empty (dst_port_fifo_empty),
+      .reset (reset),
+      .clk (clk)
+      );
+   
+   //----------------------- Logic -----------------------------
+   
+   assign    in_rdy = !in_fifo_nearly_full && !dst_port_fifo_nearly_full;
+   
+   /* pkt is from the cpu if it comes in on an odd numbered port */
+   assign pkt_is_from_cpu = in_fifo_data_dout[`IOQ_SRC_PORT_POS];
+   assign pkt_is_from_A = decoded_src[0];
+   assign pkt_is_from_B = decoded_src[2];
+   assign pkt_is_from_C = decoded_src[4];
+   
+   /* Decode the source port */
+   always @(*) begin
+      decoded_src = 0;
+      decoded_src[in_fifo_data_dout[`IOQ_SRC_PORT_POS+15:`IOQ_SRC_PORT_POS]] = 1'b1;
+   end
+   
+   /*********************************************************************
+    * Wait until the ethernet header has been decoded and the output
+    * port is found, then write the module header and move the packet
+    * to the output
+    **********************************************************************/
+   always @(*) begin
+      out_ctrl           = in_fifo_ctrl_dout;
+      out_data           = in_fifo_data_dout;
+      state_next	  = state;
+      barrier_state_next = barrier_state;
+      out_wr 	       	  = 0;
+      in_fifo_rd_en 	  = 0;
+      dst_port_rd 	  = 0;
+      word_count_next    = word_count;
+      src_ip_next        = src_ip;
+      dst_ip_next        = dst_ip;
+      ip_cksum_next      = ip_cksum;
+      dst_mac_next       = dst_mac;
+      src_mac_next       = src_mac;
+      udp_src_next       = udp_src;
+      udp_dst_next       = udp_dst;
+
+      buffer_wr_en_next = 0;
+      buffer_rd_addr_next = buffer_rd_addr;
+      buffer_wr_data_next = in_fifo_data_dout;
+      buffer_wr_addr_next = buffer_wr_addr;
+
+
+      case(state)
+	WAIT_TILL_DONE_DECODE: begin
+	   if(!dst_port_fifo_empty) begin
+	      dst_port_rd     = 1;
+	      state_next      = WRITE_HDR;
+	      in_fifo_rd_en   = 1;
+	   end
+	end
+	
+       	// write Destionation output ports */
+       	WRITE_HDR: begin
+	   if(out_rdy) begin
+	      out_wr = 1;
+	      in_fifo_rd_en = 1;
+	      //barrier traffic
+	      if(barrier_pkt && !not_barrier_pkt && in_fifo_ctrl_dout==`IO_QUEUE_STAGE_NUM) begin
+		 out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = 0;
+		 
+		 case(topo_type_latched)
+		   TOPO_RING: begin
+		      //ring_topo_head_node_state_machine
+		      if(node_type_latched == NODE_HEAD &&
+			 message_latched == MSG_AT_BR  &&
+			 pkt_is_from_cpu &&
+			 barrier_state == BR_IDLE) begin
+			 out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000001};
+			 barrier_state_next = AT_BR;
+			 state_next = UPDATE_BR_MSG;
+		      end
+		      else if(message_latched == MSG_PREV_AT_BR  &&
+			      !pkt_is_from_cpu &&
+			      barrier_state == AT_BR) begin
+			 out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000011};
+			 barrier_state_next = BR_IDLE;
+			 state_next = UPDATE_BR_MSG;			
+		      end
+		      //ring_topo_regular_node_state_machine
+		      else if(node_type_latched == NODE_NODE &&
+			      message_latched == MSG_AT_BR  &&
+			      pkt_is_from_cpu &&
+			      barrier_state == BR_IDLE) begin
+			 barrier_state_next = WAIT_NETWORK;
+			 state_next = UPDATE_BR_MSG; //WAIT_EOP
+		      end	
+		      //this is buggy. I am not sure how a packet like this reaches to the head node, but if it does it crashes things up. NEEDS TO BE FIXED
+		      else if(message_latched == MSG_PREV_AT_BR  &&
+			      !pkt_is_from_cpu &&
+			      barrier_state == BR_IDLE) begin
+			 barrier_state_next = WAIT_CPU;
+			 state_next = WAIT_PAYLOAD;
+		      end			
+		      else if(message_latched == MSG_PREV_AT_BR  &&
+			      !pkt_is_from_cpu &&
+			      barrier_state == WAIT_NETWORK) begin
+			 out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000001};
+			 barrier_state_next = WAIT_NOTIFICATION;
+			 state_next = WAIT_PAYLOAD;
+		      end						
+		      else if(message_latched == MSG_AT_BR  &&
+			      pkt_is_from_cpu &&
+			      barrier_state == WAIT_CPU) begin
+			 out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000001};
+			 barrier_state_next = WAIT_NOTIFICATION;
+			 state_next = UPDATE_BR_MSG;
+		      end
+		      else if(message_latched == MSG_RLS_BR  &&
+			      !pkt_is_from_cpu &&
+			      barrier_state == WAIT_NOTIFICATION) begin
+			 out_data[`IOQ_DST_PORT_POS+15:`IOQ_DST_PORT_POS] = {8'b0,8'b00000011};
+			 barrier_state_next = BR_IDLE;
+			 state_next = UPDATE_BR_MSG; //WAIT_EOP;
+		      end						  
+		   end // case: TOPO_RING
+		   /*****************************************************************************************************/
+		   default: begin
+		      state_next = WAIT_PAYLOAD;
+		   end
+		 endcase
+	      end // if (barrier_pkt && !not_barrier_pkt && in_fifo_ctrl_dout==`IO_QUEUE_STAGE_NUM)	      
+	      //regular ethernet NIC traffic
+	      else if(!barrier_pkt && not_barrier_pkt) begin
+		 if(in_fifo_ctrl_dout==`IO_QUEUE_STAGE_NUM) begin
+		    if(pkt_is_from_cpu) begin		    					 
+		       out_data[`IOQ_DST_PORT_POS + 15:`IOQ_DST_PORT_POS] = {1'b0, decoded_src[15:1]};
+		    end
+		    else begin
+		       out_data[`IOQ_DST_PORT_POS + 15:`IOQ_DST_PORT_POS] = {decoded_src[14:0], 1'b0};
+		    end
+		 end
+		 state_next = WAIT_EOP;
+	      end	
+	      //contingency case, packet is dropped since not classified.
+	      else begin 
+		 if(in_fifo_ctrl_dout==`IO_QUEUE_STAGE_NUM) begin
+		    out_data[`IOQ_DST_PORT_POS + 15:`IOQ_DST_PORT_POS] = 0;
+		 end
+		 state_next = WAIT_EOP;
+	      end
+	   end
+	end
+	
+	WAIT_PAYLOAD: begin
+	   if(in_fifo_ctrl_dout!=255 & out_rdy) begin
+              out_wr = 1;
+              if(word_count==5) begin
+	        $display("WAIT_PAYLOAD");
+	        word_count_next = 0;
+		buffer_rd_addr_next = 0;
+		buffer_wr_addr_next = 0;
+		//buffer_wr_en_next = 1;
+	      	state_next = WAIT_EOP;
+	      end
+	      else begin
+	        word_count_next = word_count+1;
+	      end			   
+	   end
+	   if(!in_fifo_empty & out_rdy) begin
+              in_fifo_rd_en   = 1;
+              //out_wr          = 1;
+           end
+	   
+	end	
+	
+	UPDATE_BR_MSG: begin
+	   if(in_fifo_ctrl_dout!=255 & out_rdy) begin
+	      out_wr = 1;
+	      if(word_count==0) begin
+		 case(topo_type_latched)
+		   TOPO_RING: begin
+		      //ring-----------------------------------
+		      if( (barrier_state == AT_BR && node_type_latched == NODE_HEAD) ||
+			  (barrier_state == WAIT_NETWORK && node_type_latched == NODE_NODE) ||
+			  (barrier_state == WAIT_NOTIFICATION && node_type_latched == NODE_NODE && message_latched == MSG_AT_BR)) begin
+			 src_mac_next[47:32] = in_fifo_data_dout[15:0];
+			 dst_mac_next = in_fifo_data_dout[63:16];
+		      end
+		      else if( barrier_state == BR_IDLE ) begin
+			 out_data = {src_mac,dst_mac[47:32]};
+		      end
+		   end // case: TOPO_RING
+		   
+		   default: begin
+		      word_count_next = 0;
+		      state_next = WAIT_EOP;
+		   end		   
+		 endcase
+	      end // if (word_count==0)
+	      
+	      if(word_count==1) begin
+		 case(topo_type_latched)
+		   TOPO_RING : begin
+		      if( (barrier_state == AT_BR && node_type_latched == NODE_HEAD) ||
+			  (barrier_state == WAIT_NETWORK && node_type_latched == NODE_NODE) ||
+			  (barrier_state == WAIT_NOTIFICATION && node_type_latched == NODE_NODE && message_latched == MSG_AT_BR)) begin 
+			 src_mac_next[31:0] = in_fifo_data_dout[63:32];
+		      end
+		      else if( barrier_state == BR_IDLE ) begin 
+			 out_data[63:32] = dst_mac[31:0];
+		      end
+		   end // case: TOPO_RING
+		   default: begin
+		      word_count_next = 0;
+		      state_next = WAIT_EOP;
+		   end
+		 endcase
+	      end // if (word_count==1)
+	      
+	      
+	      if(word_count==3) begin
+		 case(topo_type_latched)
+		   TOPO_RING: begin
+		      if( (barrier_state == AT_BR && node_type_latched == NODE_HEAD) ||
+			  (barrier_state == WAIT_NETWORK && node_type_latched == NODE_NODE) ||
+			  (barrier_state == WAIT_NOTIFICATION && node_type_latched == NODE_NODE && message_latched == MSG_AT_BR)) begin
+			 src_ip_next = in_fifo_data_dout[47:16];
+			 dst_ip_next[31:16] = in_fifo_data_dout[15:0];
+			 ip_cksum_next = in_fifo_data_dout[63:48];
+		      end
+		      else if( barrier_state == BR_IDLE ) begin
+			 out_data = {ip_cksum, dst_ip,src_ip[31:16]};
+		      end
+		   end // case: TOPO_RING
+
+		   default: begin
+		      word_count_next = 0;
+		      state_next = WAIT_EOP;
+		   end
+		 endcase
+	      end
+	      
+	      if(word_count==4) begin
+		 case(topo_type_latched)
+		   TOPO_RING: begin
+		      if( (barrier_state == AT_BR && node_type_latched == NODE_HEAD) ||
+			  (barrier_state == WAIT_NETWORK && node_type_latched == NODE_NODE) ||
+			  (barrier_state == WAIT_NOTIFICATION && node_type_latched == NODE_NODE && message_latched == MSG_AT_BR)) begin
+			 dst_ip_next[15:0] = in_fifo_data_dout[63:48];
+			 udp_src_next = in_fifo_data_dout[47:32];
+			 udp_dst_next = in_fifo_data_dout[31:16];
+		      end
+		      else if( barrier_state == BR_IDLE ) begin
+			 out_data[63:16] = {src_ip[15:0],udp_dst,udp_src};
+		      end
+		   end // case: TOPO_RING
+		   
+		   default: begin
+		      word_count_next = 0;
+		      state_next = WAIT_EOP;
+		   end
+		 endcase
+	      end
+	      
+	      if(word_count==5) begin
+		 out_data[63:48] = 0;
+		 case(topo_type_latched)
+		   TOPO_RING: begin
+		      if( barrier_state == AT_BR && 
+			  node_type_latched == NODE_HEAD ) begin
+			 out_data[47:32] = MSG_PREV_AT_BR;
+			 out_data[7:0] = NODE_NODE;
+		      end
+		      else if( barrier_state == BR_IDLE && 
+			       node_type_latched == NODE_NODE ) begin
+			 out_data[47:32] = MSG_RLS_BR;
+		      end 
+		      else if( barrier_state == WAIT_NOTIFICATION && 
+			       node_type_latched == NODE_NODE ) begin
+			 out_data[47:32] = MSG_PREV_AT_BR;
+		      end
+		   end // case: TOPO_RING
+		   		   
+		   default: begin
+		      word_count_next = 0;
+		      state_next = WAIT_EOP;
+		   end
+		 endcase
+		 
+		 word_count_next = 0;
+		 state_next = WAIT_EOP;//WAIT_TILL_DONE_DECODE;//WAIT_EOP;
+		 buffer_rd_addr_next = 0;
+                 buffer_wr_addr_next = 0;			
+	         //buffer_wr_en_next = 1;
+	      end
+	      else begin
+		 word_count_next = word_count + 1;	
+	      end
+	   end	
+	   if(!in_fifo_empty & out_rdy) begin
+	      in_fifo_rd_en   = 1;
+	      //out_wr          = 1;
+	   end
+	end
+	
+        // write all data 
+        WAIT_EOP: begin
+	   if(in_fifo_ctrl_dout!=0)begin
+	      if(out_rdy) begin
+		 state_next   = WAIT_TILL_DONE_DECODE;
+		 word_count_next = 0;
+		 out_wr       = 1;
+		 if(barrier_state == WAIT_NOTIFICATION || barrier_state == BR_IDLE) begin
+		    out_data = in_fifo_data_dout + buffer_rd_data; //buffer[buffer_rd_addr];
+		    buffer_wr_data_next = in_fifo_data_dout + buffer_rd_data;
+		    buffer_rd_addr_next = buffer_rd_addr_next+1;
+		 end
+		 buffer_wr_en_next = 1;
+		 buffer_wr_addr_next = buffer_wr_addr_next+1;
+		 //$display("2 buffer_rd_data : %x \t buffer_wr_data : %x \t wr_ptr : %d \t rd_ptr : %d",buffer_rd_data,buffer_wr_data,buffer_wr_addr,buffer_rd_addr);
+		 $display("2 out_data : %x \t in_data : %x",out_data,in_fifo_data_dout);
+	      end
+	   end
+	   else if(!in_fifo_empty & out_rdy) begin
+	      in_fifo_rd_en   = 1;
+	      out_wr          = 1;
+	      buffer_wr_en_next = 1;
+	      if(barrier_state == WAIT_NOTIFICATION || barrier_state == BR_IDLE) begin
+	         out_data = in_fifo_data_dout + buffer_rd_data; //buffer[buffer_rd_addr];
+		 buffer_rd_addr_next = buffer_rd_addr_next+1;
+		 buffer_wr_data_next = in_fifo_data_dout + buffer_rd_data;
+	      end	 
+	      buffer_wr_addr_next = buffer_wr_addr_next+1;	      
+	      //$display("1 buffer_rd_data : %x \t buffer_wr_data : %x \t wr_ptr : %d \t rd_ptr : %d",buffer_rd_data,buffer_wr_data,buffer_wr_addr,buffer_rd_addr); 
+	      $display("1 out_data :	 %x \t in_data :	%x",out_data,in_fifo_data_dout);
+	   end
+	end // case: WAIT_EOP
+	
+      endcase // case(state)
+   end // always @ (*)
+   
+   always @(posedge clk) begin
+      if(reset) begin
+	 state	      	<= WAIT_TILL_DONE_DECODE;
+	 barrier_state 	<= BR_IDLE;
+	 word_count    	<= 0;
+	 src_ip         <= 0;
+	 dst_ip         <= 0;
+	 ip_cksum       <= 0;
+	 src_mac        <= 0;
+	 dst_mac        <= 0;
+	 udp_src        <= 0;
+	 udp_dst        <= 0;
+	 buffer_rd_data <= 0;
+	 buffer_rd_addr <= 0;
+	 buffer_wr_addr <= 0;
+	 buffer_wr_data <= 0;
+	 buffer_wr_en   <= 0;
+	 //buffer[0]      <= 0;
+      end
+      else begin
+       	 $display("wr_addr : %d \t rd_addr : %d \t wr_data : %x \t rd_data : %x \t wr_en : %d",
+                   buffer_wr_addr-1, buffer_rd_addr_next, buffer_wr_data, buffer_rd_data, buffer_wr_en);
+	 state	       	        <= state_next;
+	 barrier_state 	        <= barrier_state_next;
+	 word_count    	        <= word_count_next;
+	 src_ip                 <= src_ip_next;
+	 dst_ip                 <= dst_ip_next;
+	 ip_cksum               <= ip_cksum_next;
+	 src_mac                <= src_mac_next;
+	 dst_mac                <= dst_mac_next;
+	 udp_src                <= udp_src_next;
+	 udp_dst                <= udp_dst_next;
+	 buffer_rd_data         <= buffer[buffer_rd_addr_next];
+	 buffer_rd_addr         <= buffer_rd_addr_next;
+	 buffer_wr_addr         <= buffer_wr_addr_next;
+	 buffer_wr_data         <= buffer_wr_data_next;
+	 buffer_wr_en           <= buffer_wr_en_next;
+	 $display("wr_addr : %d \t rd_addr : %d \t wr_data : %x \t rd_data : %x \t wr_en : %d",
+	           buffer_wr_addr-1, buffer_rd_addr_next, buffer_wr_data, buffer_rd_data, buffer_wr_en);
+	 if(buffer_wr_en) begin
+	    buffer[buffer_wr_addr-1] <= buffer_wr_data;
+	    //$display("buffer[%d] : %x",buffer_wr_addr,buffer_wr_data);
+	 end
+
+      end
+   end
+endmodule // switch_output_port
+

@@ -1,0 +1,10 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Sep 23 16:51:13 2015
+# Process ID: 1316
+# Log file: C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab05/Lab05.runs/impl_1/main.vdi
+# Journal file: C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab05/Lab05.runs/impl_1\vivado.jou
+#-----------------------------------------------------------
+source main.tcl -notrace

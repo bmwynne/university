@@ -1,0 +1,81 @@
+Name: Brandon Wynne
+Lab Partner: Paul Conway
+Date: April 03, 2014
+Lab: 10
+
+Difficulties:
+-----------------------------------------------------------------------
+In this lab we had difficulties with our BMP file and writing the pixils to 
+the lcd.. It possibly had a different version of BMP than was supported by the
+SD. We also had problems drawing the pixils to the LCD. We were taking 3 bytes
+although we were only using the first [0] for the pixil values. Therefore
+we were only writing blue to the screen. To fix this were used [0]
+[1] and [2], taking all three bytes. We also had some small problems
+with the initialization of functions, the order, delays, etc...These
+were small housekeeping errors that we were able to fix with time. . 
+Towards the end of the lab we also had errors with rotation. When putting
+the board on landscape the image was inverted, although it still rotated. 
+This was a problem that we could not fix. 
+
+
+
+What did I learn?
+-----------------------------------------------------------------------
+In this lab we learned how to be able to parse bits to print images to the 
+screen. This lab further increased our knowledge in bit manipulation
+in order to access a specific bit. We also continued to further our
+application by adding the sd card images to the functions executed. I also
+continued to learn about FAT file systems. Although I had previous 
+experience with this during my previous internship. 
+
+
+
+
+
+Questions:
+-----------------------------------------------------------------------
+
+1. Real-time clocks (RTC) are integrated circuits that keep track of current
+time. RTCs are different from ordinary hardware clocks because ordinary 
+hardware clocks instead count time in non human units. There are several
+benefits to using RTCs:
+- Low power consumption
+- Frees the main system for time-critical tasks
+- Sometimes more accurate than other methods
+
+2. Using the f3d_delay_uS() function is more accurate than the delay loop. The
+delay has an advantage of being more accurate because it frees the system from
+calculations and uses an integrated circuit rather than signals between
+registers.
+
+3. The use of DMA allows for multiple DMA channels to be initialized 
+simultaneously. This is beneficial for the SPI because the DMA
+utilizes DMA for both transmission and reception. Because DMA utilizes
+memory from the peripheral bus and the cpu, the transfer rate is much
+faster for data. Without DMA the transfer rate is 50,000 pixels/second,
+compared to 735,000 pixels/second. This improvement in data
+transfer is advantagous because it allows the bitmap to be read
+more efficiently.
+
+4. FAT is the file allocation table.  The FAT file system originates from
+the file systems usage of an index table. The table contains entries from a
+contiguous area of disk storage. Each entry contains a number for the
+following cluster or a flag indicating the end of the file. The operating
+system looks through the FAT table until the end of the file is reached.
+Because disk drives have changed,so has the number of clusters.
+This has increased the number of table element bits and because of such there
+are different variations of FAT. Fat12, Fat16, and Fat32. If the data
+is arbitrary or read wrong the volume may not be properly read causing data
+corruption on writes. If this happens the FAT will try to fix this by
+using a second table if available. If this does not happen the FAT will
+need to be formatted. This will cause the file to be lost. 
+
+5. FAT16 is beneficial for legacy systems because it is still compatible.
+There are many tools available to address the problems and recover data.
+FAT16 is efficient on volumes smaller than 256MB. FAT16 is limited to 65,536 
+clusters. There is also no built in security or file compression. FAT32
+allocates disk space much more efficiently. FAT32 uses smaller clusters 
+resulting in 10-15% more efficient use of disk space relative to size of 
+files. This reduces resources necessary for computer operation in comparision 
+to FAT16. FAT32 is only accessible from Windows 95 OSR@ and 98. FAT32
+also does not have build-in secuirty.  

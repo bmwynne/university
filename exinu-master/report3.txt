@@ -1,0 +1,8 @@
+How is synchronization achieved?
+
+Synchronization is achieved by setting a count of 1 with producer and a count of 0 with consumer. 
+By allowing producer to begin with a count of 1, the function wait will not be blocked the first time it is called. 
+This allows consumer to print initial n because the first call from consumed is blocked. The producerwaits for consumption before incrementing n.  
+
+Can it be done with one semaphore?
+I believe it can be done with a mutex. Using a mutex will allow the two processes access to the shared resource, however they must cooperate. 

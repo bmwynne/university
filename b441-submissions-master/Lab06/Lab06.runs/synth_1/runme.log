@@ -1,0 +1,12 @@
+
+*** Running vivado
+    with args -log paradd4.vds -m64 -mode batch -messageDb vivado.pb -notrace -source paradd4.tcl
+
+WARNING: Default location for XILINX_VIVADO_HLS not found: 
+./ISEWrap.sh: line 51: 16649 Killed                  $ISE_STEP "$@" >> $HD_LOG 2>&1
+
+*** Running vivado
+    with args -log paradd4.vds -m64 -mode batch -messageDb vivado.pb -notrace -source paradd4.tcl
+
+WARNING: Default location for XILINX_VIVADO_HLS not found: 
+./ISEWrap.sh: line 51: 26155 Killed                  $ISE_STEP "$@" >> $HD_LOG 2>&1

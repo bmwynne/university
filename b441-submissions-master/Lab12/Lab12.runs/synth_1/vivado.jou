@@ -1,0 +1,10 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Nov 18 18:40:37 2015
+# Process ID: 6240
+# Log file: C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab12/Lab12.runs/synth_1/PF_Processor.vds
+# Journal file: C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab12/Lab12.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source PF_Processor.tcl -notrace

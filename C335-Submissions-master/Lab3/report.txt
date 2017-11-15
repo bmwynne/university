@@ -1,0 +1,22 @@
+Brandon Wynne and Earl Dean
+
+Results:
+
+I was able to accomplish creating the Makefile poly, containing poly.c and
+dump.c. The Makefile compiled sucessfully and the binary poly was created. 
+The binary ran sucessfully. I then continued to work on the lab by extending 
+dump.c. I was able to prent all of the data types according and in alignment, 
+kind of.I am still trying to continue working on it and will do my best to get
+help and finish it during lab.
+
+Difficulties:
+
+I was unable to figure out how to sort the unassigned characters and shorten
+some of the data so it overflows to the next line which makes the formatting
+look off.
+
+Learned:
+I learned how to show different types of types from the same data in C. I was 
+briefly introduced to this in Whitmers C291 class, but this lab further
+elaborated on the topic.
+

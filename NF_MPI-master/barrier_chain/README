@@ -1,0 +1,34 @@
+This is a myhdl simulation environment for a proposed NetFPGA based barrier implementation for output_port_lookup module. output_port_lookup module is the module for routing the packets in NetFPGA suite. Therefore, we need special routing for barrier packets that could reduce the number of packets going around the network and between the NetFPGA and the host.
+
+This environment assumes a ring topology where all the hosts are connected to each other as a ring. The communication between python entities, which are actually standalone python processes, are done via unix domain name sockets. It is used in place of named pipes because of duplex nature instead of one way data communication. This could be recoded if necessary.
+
+The current version is not too configurabe, and everything is hardcoded in the files. Only option that a user needs to specify which one is going to be the head node. 
+
+Here is a sample run for this simulation with 3 hosts connected to each other in a ring topology.
+
+- You need to open 6 different terminals go into the current directory $NF_MPI_ROOT/barrier_chain in each terminal
+
+- In the first three terminal run opl_cosim.py individually with passing paramenters for the location of unix domain sockes. It needs to be in order and last one should connect to the first one to build a ring. Another important point is that one of them HAVE TO to be specified as head. Here is the generic command for head and other type of nodes
+  	python first/opl_cosim.py <server_address> <next_node_address> head
+  	python second/opl_cosim.py <server_address> <next_node_address>
+  	
+  	Example:
+     python first/opl_cosim.py ../1 ../2 head
+     python second/opl_cosim.py ../2 ../3
+     python third/opl_cosim.py ../3 ../1
+
+- Once previous step is done, the mydhl process are going to be connected to each other. They act as our so called network interface cards
+
+- On the remaining 3 terminals run client.py which are calling a barrier function. The need to specify the unix domain sockets in the command line and if it is the head node.
+	python first/client.py <server_address> head
+	python second/client.py <server_address>
+	
+	Example for the above config:
+     python first/client.py ../1 head
+     python second/client.py ../2
+     python third/client.py ../3
+
+All there clients are going to receive barrier release message after all three client reaches barrier. Once a process is killed manually, the rest is going to stop. The exit algorithm has not been implemented yet. The cycle time is set to 1 second, so it takes time to finish all the barrier release messages.
+
+ 
+

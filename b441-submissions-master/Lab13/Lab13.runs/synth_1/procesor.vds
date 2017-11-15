@@ -1,0 +1,352 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Sun Dec 06 21:24:29 2015
+# Process ID: 4312
+# Log file: C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.runs/synth_1/procesor.vds
+# Journal file: C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.runs/synth_1\vivado.jou
+#-----------------------------------------------------------
+source procesor.tcl -notrace
+Command: synth_design -top procesor -part xc7a35ticpg236-1L
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35ti'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35ti'
+INFO: [Common 17-1223] The version limit for your license is '2015.09' and will expire in -67 days. A version limit expiration means that, although you may be able to continue to use the current version of tools or IP with this license, you will not be eligible for any updates or new releases.
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:01:59 . Memory (MB): peak = 263.754 ; gain = 87.387
+---------------------------------------------------------------------------------
+INFO: [Synth 8-638] synthesizing module 'procesor' [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:22]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:83]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:87]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:95]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:103]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:108]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:113]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:117]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:123]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:128]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:134]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:140]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:146]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:151]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:157]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:81]
+WARNING: [Synth 8-4767] Trying to implement RAM 'stack_mem_reg' in registers. Block RAM or DRAM implementation is not possible; see log for reasons.
+Reason is one or more of the following :
+	1: Invalid write to RAM. 
+	2: Unable to determine number of words or word size in RAM. 
+RAM "stack_mem_reg" dissolved into registers
+INFO: [Synth 8-256] done synthesizing module 'procesor' (1#1) [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:22]
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:02:00 . Memory (MB): peak = 303.680 ; gain = 127.313
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:06 ; elapsed = 00:02:00 . Memory (MB): peak = 303.680 ; gain = 127.313
+---------------------------------------------------------------------------------
+INFO: [Device 21-403] Loading part xc7a35ticpg236-1L
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/constrs_1/new/main.xdc]
+Finished Parsing XDC File [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/constrs_1/new/main.xdc]
+Completed Processing XDC Constraints
+
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.010 . Memory (MB): peak = 599.410 ; gain = 0.000
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:13 ; elapsed = 00:02:27 . Memory (MB): peak = 599.410 ; gain = 423.043
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35ticpg236-1L
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:13 ; elapsed = 00:02:27 . Memory (MB): peak = 599.410 ; gain = 423.043
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:13 ; elapsed = 00:02:27 . Memory (MB): peak = 599.410 ; gain = 423.043
+---------------------------------------------------------------------------------
+INFO: [Synth 8-3537] HDL ADVISOR - The operator resource <adder> is shared. To prevent sharing consider applying a KEEP on the inputs of the operator [C:/Users/brandonwynne/Documents/IU/b441-submissions/Lab13/Lab13.srcs/sources_1/new/main.v:81]
+INFO: [Synth 8-5546] ROM "stack_mem" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "stack_mem" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "stack_mem" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "byte_a" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "byte_b" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ret_msg" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ret_msg" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ret_msg" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ret_msg" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ret_msg" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ret_msg" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "SP" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "SP" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "SP" won't be mapped to RAM because it is too sparse
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:18 ; elapsed = 00:02:34 . Memory (MB): peak = 599.410 ; gain = 423.043
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      8 Bit       Adders := 2     
+	   3 Input      8 Bit       Adders := 1     
+	   2 Input      7 Bit       Adders := 1     
+	   2 Input      6 Bit       Adders := 1     
+	   2 Input      5 Bit       Adders := 1     
++---Registers : 
+	                8 Bit    Registers := 2     
+	                7 Bit    Registers := 1     
+	                5 Bit    Registers := 1     
++---Muxes : 
+	   2 Input      8 Bit        Muxes := 192   
+	  15 Input      8 Bit        Muxes := 1     
+	  16 Input      7 Bit        Muxes := 1     
+	   2 Input      5 Bit        Muxes := 1     
+	   4 Input      4 Bit        Muxes := 2     
+	  15 Input      3 Bit        Muxes := 1     
+	  15 Input      2 Bit        Muxes := 3     
+	   2 Input      2 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 83    
+	   3 Input      1 Bit        Muxes := 2     
+	   4 Input      1 Bit        Muxes := 5     
+	   5 Input      1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Hierarchical Component Statistics 
+---------------------------------------------------------------------------------
+Hierarchical RTL Component report 
+Module procesor 
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input      8 Bit       Adders := 2     
+	   3 Input      8 Bit       Adders := 1     
+	   2 Input      7 Bit       Adders := 1     
+	   2 Input      6 Bit       Adders := 1     
+	   2 Input      5 Bit       Adders := 1     
++---Registers : 
+	                8 Bit    Registers := 2     
+	                7 Bit    Registers := 1     
+	                5 Bit    Registers := 1     
++---Muxes : 
+	   2 Input      8 Bit        Muxes := 192   
+	  15 Input      8 Bit        Muxes := 1     
+	  16 Input      7 Bit        Muxes := 1     
+	   2 Input      5 Bit        Muxes := 1     
+	   4 Input      4 Bit        Muxes := 2     
+	  15 Input      3 Bit        Muxes := 1     
+	  15 Input      2 Bit        Muxes := 3     
+	   2 Input      2 Bit        Muxes := 1     
+	   2 Input      1 Bit        Muxes := 83    
+	   3 Input      1 Bit        Muxes := 2     
+	   4 Input      1 Bit        Muxes := 5     
+	   5 Input      1 Bit        Muxes := 1     
+---------------------------------------------------------------------------------
+Finished RTL Hierarchical Component Statistics
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 120 (col length:60)
+BRAMs: 150 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+Start Parallel Synthesis Optimization  : Time (s): cpu = 00:00:18 ; elapsed = 00:02:34 . Memory (MB): peak = 599.410 ; gain = 423.043
+---------------------------------------------------------------------------------
+Start Cross Boundary Optimization
+---------------------------------------------------------------------------------
+INFO: [Synth 8-5546] ROM "ret_msg" won't be mapped to RAM because it is too sparse
+INFO: [Synth 8-5546] ROM "ret_msg" won't be mapped to RAM because it is too sparse
+---------------------------------------------------------------------------------
+Finished Cross Boundary Optimization : Time (s): cpu = 00:00:24 ; elapsed = 00:02:42 . Memory (MB): peak = 599.410 ; gain = 423.043
+---------------------------------------------------------------------------------
+Finished Parallel Reinference  : Time (s): cpu = 00:00:24 ; elapsed = 00:02:42 . Memory (MB): peak = 599.410 ; gain = 423.043
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+WARNING: [Synth 8-3332] Sequential element (\STOS_reg[7]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\TOS_reg[7]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\TOS_reg[6]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\TOS_reg[5]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\STOS_reg[5]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\STOS_reg[6]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\TOS_reg[4]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\STOS_reg[3]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\STOS_reg[4]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\TOS_reg[3]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\TOS_reg[1]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\STOS_reg[1]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\TOS_reg[0]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\STOS_reg[2]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\TOS_reg[2]__0 ) is unused and will be removed from module procesor.
+WARNING: [Synth 8-3332] Sequential element (\STOS_reg[0]__0 ) is unused and will be removed from module procesor.
+---------------------------------------------------------------------------------
+Start Area Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Area Optimization : Time (s): cpu = 00:00:37 ; elapsed = 00:03:04 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+Finished Parallel Area Optimization  : Time (s): cpu = 00:00:37 ; elapsed = 00:03:04 . Memory (MB): peak = 850.199 ; gain = 673.832
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+Finished Parallel Synthesis Optimization  : Time (s): cpu = 00:00:37 ; elapsed = 00:03:04 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:50 ; elapsed = 00:03:17 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:51 ; elapsed = 00:03:18 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:01:10 ; elapsed = 00:03:42 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:01:12 ; elapsed = 00:03:44 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+
+Report Check Netlist: 
++------+------------------+-------+---------+-------+------------------+
+|      |Item              |Errors |Warnings |Status |Description       |
++------+------------------+-------+---------+-------+------------------+
+|1     |multi_driven_nets |      0|        0|Passed |Multi driven nets |
++------+------------------+-------+---------+-------+------------------+
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:12 ; elapsed = 00:03:44 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+
+Report RTL Partitions: 
++-+--------------+------------+----------+
+| |RTL Partition |Replication |Instances |
++-+--------------+------------+----------+
++-+--------------+------------+----------+
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:13 ; elapsed = 00:03:44 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports : Time (s): cpu = 00:01:13 ; elapsed = 00:03:44 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:13 ; elapsed = 00:03:44 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+Report BlackBoxes: 
++-+--------------+----------+
+| |BlackBox name |Instances |
++-+--------------+----------+
++-+--------------+----------+
+
+Report Cell Usage: 
++------+-------+------+
+|      |Cell   |Count |
++------+-------+------+
+|1     |BUFG   |     3|
+|2     |CARRY4 |    18|
+|3     |LUT1   |    30|
+|4     |LUT2   |    50|
+|5     |LUT3   |   786|
+|6     |LUT4   |   152|
+|7     |LUT5   |  2189|
+|8     |LUT6   |  3374|
+|9     |MUXF7  |    64|
+|10    |MUXF8  |    32|
+|11    |FDRE   |   645|
+|12    |IBUF   |     4|
+|13    |OBUF   |    28|
++------+-------+------+
+
+Report Instance Areas: 
++------+---------+-------+------+
+|      |Instance |Module |Cells |
++------+---------+-------+------+
+|1     |top      |       |  7375|
++------+---------+-------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:14 ; elapsed = 00:03:46 . Memory (MB): peak = 850.199 ; gain = 673.832
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 16 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:01:04 ; elapsed = 00:01:26 . Memory (MB): peak = 850.199 ; gain = 341.605
+Synthesis Optimization Complete : Time (s): cpu = 00:01:14 ; elapsed = 00:03:46 . Memory (MB): peak = 850.199 ; gain = 673.832
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Netlist 29-17] Analyzing 22 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+WARNING: [Netlist 29-101] Netlist 'procesor' is not ideal for floorplanning, since the cellview 'procesor' contains a large number of primitives.  Please consider enabling hierarchy in synthesis if you want to do floorplanning.
+INFO: [Project 1-570] Preparing netlist for logic optimization
+INFO: [Opt 31-138] Pushed 2 inverter(s) to 611 load pin(s).
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+INFO: [Common 17-83] Releasing license: Synthesis
+46 Infos, 18 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:01:16 ; elapsed = 00:03:46 . Memory (MB): peak = 850.199 ; gain = 641.824
+report_utilization: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.142 . Memory (MB): peak = 850.199 ; gain = 0.000
+INFO: [Common 17-206] Exiting Vivado at Sun Dec 06 21:28:20 2015...

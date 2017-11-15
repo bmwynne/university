@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SchemeUserState</key>
+	<dict>
+		<key>Hello Touch bmwynne.xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>0</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>1FD8E1AC1D8F809C00B6C220</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1FD8E1C01D8F809C00B6C220</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>1FD8E1CB1D8F809C00B6C220</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+	</dict>
+</dict>
+</plist>

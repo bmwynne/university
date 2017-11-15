@@ -1,0 +1,11 @@
+registers.v
+NF_2.1_defines.v
+udp_defines.v
+user_logic.v
+fallthrough_small_fifo.v
+generic_sw_regs.v
+generic_hw_regs.v
+generic_cntr_regs.v
+generic_regs.v
+crypto.v
+tb_crypto.v

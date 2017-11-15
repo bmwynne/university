@@ -1,0 +1,53 @@
+Name: Brandon Wynne
+Date: April 1, 2014
+C335 Computer Structures
+Final Project: Quick Draw
+
+Tasks I was responsible for:
+
+
+I helped with development of the game by working with Paul for the games logic and coding some portions of the game.
+I directly coded some audio and was in charge of converting and implementing the custom audio, before we knew how to do it. 
+I also was in charge of creating and coding the second player portion of the game. I had to take the code from the 
+single player game and instantiated two of everything as well as get the second nunchuk to work and read data. This proved
+to be more difficult than I thought because I had to separate calculations and create different boundaries for the matrices.
+
+I also came up with the idea for the first game that we scrapped and later did not have enough time for. This game
+was called marbleRun() and was a utilized using the boards gyro/accelerometer to read values and move the ball. I created
+the concept art for the levels of the game. 
+
+
+Technical Challenges:
+
+Audio: With the audio I had lots of technical challenges. Both Paul and I could not figure out how to get custom wave files
+to work. The first was figuring out what type of .wav was needed. If the .wav was formatted in 16 bit or 32 bit then it would 
+not work. After research I found that I had to convert it to 8 bit mono, and I also found that a sample rate under 22,000hz was
+optimal. I used audacity to convert the audio files. We also have a technical problem where the SD Card does errors
+out sometimes even though the .wav is not corrupt. In order to get it to work you just have to eject it...re-insert it and
+restart the board. It is very weird and neither Paul or I could figure it out.
+
+DrawGame2Player():
+
+With the two player version of the game I had difficulties with the second nunchuk. I successfully split the game 
+in half creating new calculations and matrices. I had problems reading the nunchuk data from the second nunchuk.
+That was the biggest problem with second player game. It would freeze because of a problem we later found with 
+the memory address being read from nunchuk2. In the end the problem was that the memory address was different....Once
+the memory address was changed to the same as nunchuk1 we had values reading and were able to play the two player game.
+Although this was later when both Paul and I were working. 
+
+ 
+MarbleRun():
+This game was later scrapped but I had problems reading the bmp file. We never perused it so I stopped working on it.
+
+
+
+What would I do differently If I could start the project over?
+
+If I could start the project over I would have suggested that Paul and I work on two different
+games at the same time so we could have had marbleRun() work. Quick Draw was created
+while working on marbleRun() and we decided that it would be a fun concept. I also wish that I could of
+figured out how to get rid of the SD Card error. With regards to having enough time to get marbleRun() to work, I wish
+I was able to spend more time on the project. Even though I put in a decent amount of work, I wish I was able to put in
+a LARGE amount of work in order to create an undoubtedly satisfying game. Unfortunately I was plagued with lots of other
+assignments and a research poster, so my time was divided. I definitely could not have enjoyed this project more. This
+project made all of the struggles in the lab worth it because I had a final project that I wanted and it is fun. 

@@ -1,0 +1,32 @@
+This is a myhdl simulation environment for a proposed NetFPGA based barrier implementation for output_port_lookup module.
+output_port_lookup module is the module for routing the packets in NetFPGA suite. Therefore, we need special routing for
+barrier packets that could reduce the number of packets going around the network and between the NetFPGA and the host.
+
+This environment assumes a ring topology where all the hosts are connected to each other as a ring. The communication 
+between python entities, which are actually standalone python processes, are done via unix domain name sockets. It is used 
+in place of named pipes because of duplex nature instead of one way data communication. This could be recoded if necessary.
+
+The current version is not too configurabe, and everything is hardcoded in the files. Only option that a user needs to 
+specify which one is going to be the head node. 
+
+Here is a sample run for this simulation.
+
+- You need to open 6 different terminals go into the current directory $NF_MPI_ROOT/opl_chain in each terminal
+
+- In the first three terminal run opl_cosim.py individually. One of them needs to be specified as head.
+     python first/opl_cosim.py head
+     python second/opl_cosim.py
+     python third/opl_cosim.py
+
+- Once previous step is done, the mydhl process are going to be connected to each other. They act as our so called network 
+interface cards
+
+- On the remaining 3 terminals run client.py which are calling a barrier function. 
+     python first/client.py
+     python second/client.py
+     python third/client.py
+
+All there clients are going to receive barrier release message after all thre client reaches barrier. Once a process is killed manually, the rest is going to stop. The exit algorithm has not been implemented yet. 
+
+ 
+

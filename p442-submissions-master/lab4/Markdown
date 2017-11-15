@@ -1,0 +1,89 @@
+/*
+Filename: Markdown *
+*Part of: C442 Homework/Lab Assignment 3 *
+*Created by: Paul Conway *
+*Created on: 02/06/2015 *
+*Last Modified by: Paul Conway *
+*Last Modified on: 02/06/2015 *
+*/
+
+
+main.c 
+======
+
+2048 bytes of stack for thread & space for required thread structs
+
+  * static THD_WORKING_AREA(waShell,2048);
+
+Declare a new thread_t structure for shell 
+
+  * static thread_t *shelltp1;
+
+Declare SPIConfig structures: 
+sets up PortA Bit 8 as the chip select for the pressure sensor 
+
+  * static SPIConfig pressure_cfg; 
+
+sets up PortE Bit 3 as the chip select for the gyro 
+
+  * static SPIConfig gyro_cfg
+
+reads data from pressure register with address specified in argument
+
+  * uint8_t pressure_read_register(uint8_t address)
+
+allows data, passed as 2nd argument, to be written to pressure register, passed as 1st argument
+
+  * void pressure_write_register(uint8_t address, uint8_t data)
+
+reads data from	gyro register with address specified in argument
+
+  * uint8_t gyro_read_register(uint8_t address)
+
+allows data, passed as 2nd argument, to be written to gyro register, passed as 1st argument
+
+  * void gyro_write_register(uint8_t address, uint8_t data)
+
+functions called at mapped shell command
+
+  * static void cmd_myecho(BaseSequentialStream *chp, int argc, char *argv[])
+  * static void cmd_gyro(BaseSequentialStream *chp, int argc, char *argv[])
+  * static void cmd_press(BaseSequentialStream *chp, int argc, char *argv[])
+  * static void cmd_alt(BaseSequentialStream *chp, int argc, char *argv[])
+
+helper function, called from cmd_alt(), converts float input mb to feet
+
+  * double md_ft(float mb) 
+
+list of mapped string to shell command function name
+
+  * static const ShellCommand commands[]
+
+map stream to commands[]
+
+  * static const ShellConfig shell_cfg1
+
+handler; restarts shell thread after kill command
+
+  * static void termination_handler(eventid_t id)
+
+list of event handlers
+
+  * static evhandler_t fhandlers[]
+
+main function, application entry point:  
+ init functions, 
+ serial driver initialization 9600 baud rate
+ set pins for spi on GPIOA
+ set gyro and pressure settings by writing to control registers 
+ thread starts, 
+ while(1) check events
+
+  * int main(void) 
+
+
+
+wiring shematic
+===============
+
+

@@ -1,0 +1,50 @@
+Names: Brandon Wynne and Paul Conway
+Date: May 1, 2014
+C335 Computer Structures Final Project
+
+Project: Quick Draw 1 Player, 2 Player, and High Scores
+
+Description of game concept and core functionality:
+
+For our project we decided to create a series of mini games, although due to time constraints we only executed one for the
+project grade. Our game is called Quick Draw, and contains a single player and multiplayer function. The objective of 
+Quick Draw is simple: fill the screen with color using the nunchuks gyro and accelerometer. In single player, once you
+fill the screen completely the game is over and a high score is calculated and recored. In multiplayer, the first person 
+to fill their portion of the screen wins. The core functionality of this is quite simple. We created a matrix which is the 
+same size as the areas of the screen needing to be filled. When a player moves the nunchuk, the x and y location changes 
+based on the tilt angle. Therefore, new portions of the screen are drawn and new locations in the matrix are changed to 
+"full". The matrices are initialized to contain all 0's and when Players draw new locations they change those 0's to 1's.
+Every fifth iteration through the while loop, functions check if the matrix or matrices are filled. If the matrix or 
+matrices contain only 1s then they are filled. This represents the matrix being full of "color". Therefore, a "tail" is 
+created behind the nunchuk cursor by calculating the current and last x and y values, having then drawn a rectangle of 
+color on the board. When the matrix or matrices is filled with all 1's then the game is over
+
+The current finished games time is also added to the High Scores function located in the main menu. The High Scores
+function checks if the game over function is reached and how long it takes to do so. The High Score is started at 1000
+to simulate a high score. Once a game is won count starts at 0 and increases by 1 for the "High Score". The finished 
+time is added to the High Scores board and is compared to either be a first place, second place, or third place. Our personal
+best is 77. --- Low scores are good, like golf.
+
+
+Task Breakdown between partners for the project:
+
+Together: We both worked on the single player game and menu together with Paul coding and both of us working on the logic. This
+included initializing and utilizing the LCD, Speaker, Nunchuk, SD CARD. We both continued to work on the initialization of the
+matrix or matrices, the function that checks if they are filled, and the functions that fill the screen with color when
+the matrix or matrices are filled. Along with those functions, we both continued to work on any function that either
+of us created. We both struggled with the I2C1 vs I2C2 and initializing the second nunchuk. We also both fixed
+each other bugs and logic problems.
+
+Paul:
+
+Paul came up with the high scores function in the mini game menu and the creation of a score. Paul also came up with the
+GUI for the mini games menu screen and how it is layed out.
+
+Brandon:
+
+Brandon set up the audio and formatted our custom audio to work in 8 bit form. Brandon also split up the code
+from the single player game in order to create the multiplayer player game.  
+
+
+Ultimately both of us touched all aspects of code and attempted to contribute to every part of the project. 
+

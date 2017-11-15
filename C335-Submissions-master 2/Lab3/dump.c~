@@ -1,0 +1,15 @@
+//
+// dump.c
+//
+#include <stdio.h>
+void dump_memory(void *p, int len)
+{
+  int i;
+
+  for (i = 0; i < len; i++) {
+    printf("%8p \n  %c \n %#4x \n %5d \n %10d \n %f \n %f \n \n\n\n ",
+	   p + i, *(unsigned char *)(p + i),
+	   *(char *)(p + i),*(short *)(p + i),*(int *)(p + i),*(float *)(p + i),
+	   *(double *)(p + i));
+  }
+}

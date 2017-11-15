@@ -1,0 +1,8 @@
+CC = gcc
+CFLAGS = -g
+LDFLAGS =
+
+poly: poly.c
+	$(CC) $(CFLAGS) -c poly.c
+dump: dump.c
+	$(CC) $(CFLAGS) -c dump.c

@@ -1,0 +1,6 @@
+
+*** Running vivado
+    with args -log ALU_4Bit.vds -m64 -mode batch -messageDb vivado.pb -notrace -source ALU_4Bit.tcl
+
+WARNING: Default location for XILINX_VIVADO_HLS not found: 
+./ISEWrap.sh: line 51: 14820 Killed                  $ISE_STEP "$@" >> $HD_LOG 2>&1

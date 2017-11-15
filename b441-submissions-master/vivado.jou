@@ -1,0 +1,37 @@
+#-----------------------------------------------------------
+# Vivado v2015.2 (64-bit)
+# SW Build 1266856 on Fri Jun 26 16:35:25 MDT 2015
+# IP Build 1264090 on Wed Jun 24 14:22:01 MDT 2015
+# Start of session at: Wed Sep 23 17:40:40 2015
+# Process ID: 29266
+# Log file: /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/vivado.log
+# Journal file: /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/vivado.jou
+#-----------------------------------------------------------
+start_gui
+open_project /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.xpr
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+close [ open /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/sim.v w ]
+add_files -fileset sim_1 /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/sim.v
+update_compile_order -fileset sim_1
+remove_files -fileset sim_1 /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/sim.v
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+close [ open /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/tb_Mux_4_1.v w ]
+add_files -fileset sim_1 /nfs/nfs4/home/bmwynne/Documents/fall-2015/b441-submissions/Lab05/Lab05.srcs/sim_1/new/tb_Mux_4_1.v
+update_compile_order -fileset sim_1
+launch_simulation
+source main.tcl
+set_property -name {xsim.simulate.runtime} -value {50ns} -objects [current_fileset -simset]
+close_sim
+launch_simulation
+source main.tcl
+close_sim
+update_compile_order -fileset sim_1
+update_compile_order -fileset sources_1
+update_compile_order -fileset sim_1
+launch_simulation
+source tb_Mux_4_1.tcl
+close_sim
+reset_run synth_1
+launch_runs synth_1
+wait_on_run synth_1
+reset_run synth_1 -noclean_dir 

@@ -1,0 +1,77 @@
+// Created by: Brandon Wynne
+// Created on: 10/31/2014
+// Last Modified by: Brandon Wynne
+// Last Modified on: 12/08/2014
+// File: main.c
+// Project: NBody-Problem
+// Special Thanks to Matt Anderson and Martin Swany for help in creating my N-Body code.
+
+#include "inc/NBodyCalculation.h"
+#include "inc/Vector.h"
+#include <hpx/hpx.h>
+
+static hpx_action_t _main         = 0;
+
+static int _nbody_action(void *args) {  
+  printf("HPX is Working -- Hello!", hpx_get_my_rank());
+  hpx_shutdown(HPX_SUCCESS);
+}
+
+// Main
+int main(int argc, const char * argv[]) {
+ 
+ // Initialize HPX 
+  int e = hpx_init(&argc, &argv);
+  if (e) {
+    fprintf(stderr, "HPX: failed to initialize. \n");
+    return e;
+  }
+
+    // Variables
+    FILE *file_path; // Filepath to save data
+
+    int number_of_bodies = atoi(argv[1]); // User input number of variables converted to int for security
+    int number_of_time_steps = atoi(argv[2]); // User input number of time steps converted to int for security
+    int advance; // Initialize an index for Time Step loop called advance
+    
+    // Checks the number of arguments in the terminal
+    if (argc != 3) {
+        printf("Usage: ./nbody [-n <Number of Bodies>] [-n <Number of Time Steps> \n");
+        return 1;
+    }
+    
+    // Initialize Array of Bodies
+    Body body_array[number_of_bodies];
+    
+    // Counters
+    int i = 0;
+    
+    // Opens a file called initial-data.dat and writes to it
+    file_path = fopen("data.dat","w");
+    if (file_path == NULL) {
+        printf("data.dat failed to open for writing. \n"); // exits if file fails to create
+        exit(0);
+    }
+    
+    // Populate Bodies
+    random_body_generator(number_of_bodies, body_array);
+    
+    // Reset Counter To Print Inital Position Values
+    i = 0;
+    
+    // Print Initial Values and Write to Data.dat
+    while (i < number_of_bodies) {
+        //printf("Initial Position for body[%d]: x: %lg y: %lg z: %lg\n",body_array[i].ID,body_array[i].position.x, body_array[i].position.y, body_array[i].position.z);
+        //fprintf(file_path, "%lg,%lg,%lg\n",body_array[i].position.x, body_array[i].position.y, body_array[i].position.z);
+      i++;
+    }
+   
+    // Create an action thread and register it to hpx
+    HPX_REGISTER_ACTION(_nbody_action, &nbody);
+    
+    // Close Filepath
+    fclose(file_path);
+  
+    
+    return hpx_run(&nbody, NULL, 0);
+}
